@@ -1,0 +1,103 @@
+use("db_campus_rappi");
+db.createCollection("counters");
+db.counters.insertMany([
+    {_id : "userId", sequence_value : 0},
+    {_id : "shopkeeperId", sequence_value : 0}
+
+]);
+
+function siguienteId(coleccion) {
+    const sequenceDocument = db.counters.findOneAndUpdate(
+        { _id: `${coleccion}Id` },
+        { $inc: { sequence_value: 1 } },
+        { returnDocument: "after" }
+    );
+    return sequenceDocument.sequence_value;
+};
+/**
+ * ! User
+ */
+use("db_campus_rappi");
+db.createCollection("user", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'username', 'email', 'password','phone','address', 'registrationDate'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                username: {
+                    bsonType: 'string',
+                    minLength: 3,
+                    description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio y debe ser válido',
+                    pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                }
+                ,
+                password: {
+                    bsonType: 'string',
+                    minLength: 5,
+                    description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                },
+                phone: {
+                    "bsonType": "string",
+                    "description": "El teléfono es obligatorio y debe cumplir con ciertas restricciones",
+                    "pattern": "[+\\-0-9\\s]+$"
+                },
+                address: {
+                    "bsonType": "object",
+                    "required": ["city", "street"],
+                    "properties": {
+                        "city": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la ciudad."
+                        },
+                        "street": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la calle."
+                        }
+                    }},
+                    registrationDate: {
+                    bsonType: 'date',
+                    description: 'la fecha registrada es obligatoria'
+                }
+            }
+        }
+    }
+});
+db.user.insertMany([
+    {
+        _id: Number(siguienteId("user")),
+        username: "usuario123",
+        email: "usuario@example.com",
+        password: "secreto",
+        phone: "+123456789",
+        address: {
+        city: "Ciudad Ejemplo",
+        street: "Calle Principal"
+        },
+        registrationDate: ISODate("2023-08-19")
+    },
+        {
+        _id: Number(siguienteId("user")),
+        username: "usuario123",
+        email: "usuario@example.com",
+        password: "secreto",
+        phone: "+123456789",
+        address: {
+        city: "Ciudad Ejemplo",
+        street: "Calle Principal"
+        },
+        registrationDate: ISODate("2023-08-19")
+    }
+])
+    
