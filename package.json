@@ -18,7 +18,10 @@
     "express": "4.18.2",
     "express-rate-limit": "^6.8.0",
     "express-session": "1.17.3",
-    "mongodb": "5.7.0"
+    "mongodb": "5.7.0",
+    "morgan": "^1.10.0",
+    "passport": "0.6.0",
+    "passport-http-bearer": "1.0.1"
   },
   "devDependencies": {
     "jose": "4.14.4",
