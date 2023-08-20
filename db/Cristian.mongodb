@@ -2,7 +2,8 @@ use("db_campus_rappi");
 //db.createCollection("counters");
 db.counters.insertMany([
     {_id : "taskId", sequence_value : 0},
-    {_id : "reviewId", sequence_value : 0}
+    {_id : "reviewId", sequence_value : 0},
+    {_id : "categoryId", sequence_value : 0}
 ]);
 
 function siguienteId(coleccion) {
@@ -182,7 +183,7 @@ db.createCollection("review", {
 db.review.insertMany(
     [
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 1,
           "user_id": 2,
           "rating": 4,
@@ -190,7 +191,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-18T10:00:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 2,
           "user_id": 3,
           "rating": 5,
@@ -198,7 +199,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-18T11:30:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 3,
           "user_id": 1,
           "rating": 3,
@@ -206,7 +207,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-18T13:15:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 4,
           "user_id": 5,
           "rating": 2,
@@ -214,7 +215,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-18T14:45:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 5,
           "user_id": 1,
           "rating": 5,
@@ -222,7 +223,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-18T16:30:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 1,
           "user_id": 3,
           "rating": 4,
@@ -230,7 +231,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-19T09:00:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 2,
           "user_id": 4,
           "rating": 3,
@@ -238,7 +239,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-19T10:45:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 3,
           "user_id": 5,
           "rating": 1,
@@ -246,7 +247,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-19T12:30:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 4,
           "user_id": 2,
           "rating": 5,
@@ -254,7 +255,7 @@ db.review.insertMany(
           "createdAt": ISODate("2023-08-19T14:00:00Z")
         },
         {
-          "_id": siguienteId('review'),
+          "_id": Number(siguienteId('review')),
           "task_id": 5,
           "user_id": 4,
           "rating": 3,
@@ -264,3 +265,87 @@ db.review.insertMany(
 ])
 
 
+db.createCollection("category", {
+    capped: true,
+    size: 1000,
+    max: 10,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'name', 'description'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "El id_categoria debe ser un numero entero, y es obligatorio"
+                },
+                name: {
+                    bsonType: 'string',
+                    description: "el nombre_categoria debe contener minimo 20 caracteres, y es obligatorio"
+                },
+                description: {
+                    bsonType: 'string',
+                    description: 'La descripcion_categoria es obligatoria y debe ser un string',
+                },
+                icon: {
+                    bsonType: "string",
+                    description: "El icono_categoria debe ser un string valido (ej. fas fa-birthday-cake)"
+                }
+            }
+
+        }
+    }
+});
+
+
+db.category.insertMany([
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Reparaciones",
+      "description": "Servicios de reparación y mantenimiento en el hogar.",
+      "icon": "fas fa-tools"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Limpieza",
+      "description": "Servicios de limpieza y organización en el hogar o la oficina.",
+      "icon": "fas fa-broom"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Jardinería",
+      "description": "Cuidado y mantenimiento de jardines y áreas verdes.",
+      "icon": "fas fa-leaf"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Cuidado de Mascotas",
+      "description": "Cuidado de perros, gatos y otras mascotas.",
+      "icon": "fas fa-paw"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Reparto de Comida",
+      "description": "Entrega de alimentos a domicilio.",
+      "icon": "fas fa-pizza-slice"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Clases Particulares",
+      "description": "Clases de idiomas, música, deportes y más.",
+      "icon": "fas fa-graduation-cap"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Transporte",
+      "description": "Servicios de transporte de personas o paquetes.",
+      "icon": "fas fa-car"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Eventos",
+      "description": "Organización y planificación de eventos especiales.",
+      "icon": "fas fa-birthday-cake"
+    }
+  ]
+  )
