@@ -77,27 +77,233 @@ db.createCollection("user", {
 db.user.insertMany([
     {
         _id: Number(siguienteId("user")),
-        username: "usuario123",
-        email: "usuario@example.com",
+        username: "jose david ramirez",
+        email: "josedavid@example.com",
         password: "secreto",
         phone: "+123456789",
         address: {
-        city: "Ciudad Ejemplo",
+        city: "bucaramanga",
         street: "Calle Principal"
         },
         registrationDate: ISODate("2023-08-19")
     },
         {
         _id: Number(siguienteId("user")),
-        username: "usuario123",
-        email: "usuario@example.com",
-        password: "secreto",
+        username: "juan diego",
+        email: "juandiego@example.com",
+        password: "juan123",
         phone: "+123456789",
         address: {
         city: "Ciudad Ejemplo",
         street: "Calle Principal"
         },
-        registrationDate: ISODate("2023-08-19")
+        registrationDate: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "maria.gonzalez",
+        email: "maria@example.com",
+        password: "contraseña123",
+        phone: "+987654321",
+        address: {
+            city: "Medellín",
+            street: "Avenida Principal"
+        },
+        registrationDate: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "alex.smith",
+        email: "alex@example.com",
+        password: "mypassword",
+        phone: "+555123456",
+        address: {
+            city: "New York",
+            street: "123 Main Street"
+        },
+        registrationDate: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "laura.johnson",
+        email: "laura@example.com",
+        password: "securepass",
+        phone: "+789456123",
+        address: {
+            city: "Los Angeles",
+            street: "Sunset Boulevard"
+        },
+        registrationDate: ISODate("2023-08-21")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "juan.perez",
+        email: "juan@example.com",
+        password: "miclave",
+        phone: "+123123123",
+        address: {
+            city: "Mexico City",
+            street: "Calle Juarez"
+        },
+        registrationDate: ISODate("2023-08-21")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "emily.williams",
+        email: "emily@example.com",
+        password: "emilyspass",
+        phone: "+444555666",
+        address: {
+            city: "London",
+            street: "Baker Street"
+        },
+        registrationDate: ISODate("2023-08-22")
+    } 
+]);
+/**
+ * ! shopkeeper
+ */
+use("db_campus_rappi");
+db.createCollection("shopkeeper", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'name', 'email', 'password','phone','address', 'availability'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                name: {
+                    bsonType: 'string',
+                    minLength: 3,
+                    description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio y debe ser válido',
+                    pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                }
+                ,
+                password: {
+                    bsonType: 'string',
+                    minLength: 5,
+                    description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                },
+                phone: {
+                    "bsonType": "string",
+                    "description": "El teléfono es obligatorio y debe cumplir con ciertas restricciones",
+                    "pattern": "[+\\-0-9\\s]+$"
+                },
+                address: {
+                    "bsonType": "object",
+                    "required": ["city", "street"],
+                    "properties": {
+                        "city": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la ciudad."
+                        },
+                        "street": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la calle."
+                        }
+                    }},
+                availability: {
+                bsonType: 'bool',
+                description: 'la fecha registrada es obligatoria'
+                }
+            }
+        }
     }
-])
-    
+});    
+db.shopkeeper.insertMany([
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "luis caicedo",
+        email: "luis@example.com",
+        password: "domi123",
+        phone: "+123456789",
+        address: {
+        city: "bucaramanga",
+        street: "Calle Principal"
+        },
+        availability: true
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name : "Ana Martinez",
+        email: "ana@example.com",
+        password: "ana456",
+        phone: "+987654321",
+        address: {
+            "city": "Madrid",
+            "street": "Calle Principal"
+        },
+        availability: false
+    }
+    ,
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Michael Johnson",
+        email: "michael@example.com",
+        password: "mikepass",
+        phone: "+987654321",
+        address: {
+            city: "Medellín",
+            street: "Avenida Principal"
+        },
+        availability: true
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Sophie Martin",
+        email: "sophie@example.com",
+        password: "sophie789",
+        phone: "+555123456",
+        address: {
+            city: "New York",
+            street: "123 Main Street"
+        },
+        availability: false
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "laura.johnson",
+        email: "laura@example.com",
+        password: "securepass",
+        phone: "+789456123",
+        address: {
+            city: "Los Angeles",
+            street: "Sunset Boulevard"
+        },
+        availability: true
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Carlos Gonzalez",
+        email: "carlos@example.com",
+        password: "car123",
+        phone: "+123123123",
+        address: {
+            city: "piedecuesta",
+            street: "Calle Juarez"
+        },
+        availability: true
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "francisco mora",
+        email: "fran@example.com",
+        password: "micontra123",
+        phone: "+444555666",
+        address: {
+            city: "London",
+            street: "Baker Street"
+        },
+        availability: false
+    } 
+]);
