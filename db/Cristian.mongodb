@@ -2,7 +2,8 @@ use("db_campus_rappi");
 //db.createCollection("counters");
 db.counters.insertMany([
     {_id : "taskId", sequence_value : 0},
-    {_id : "reviewId", sequence_value : 0}
+    {_id : "reviewId", sequence_value : 0},
+    {_id : "categoryId", sequence_value : 0}
 ]);
 
 function siguienteId(coleccion) {
@@ -135,3 +136,216 @@ db.task.insertMany([
     }
 ])
 
+
+
+db.createCollection("review", {
+    capped: true,
+    size: 4000,
+    max: 70,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'task_id', 'user_id','rating', 'createdAt'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "El id_review debe ser un numero entero, y es obligatorio"
+                },
+                task_id: {
+                    bsonType: 'int',
+                    description: "El id_tarea debe ser un numero entero, y es obligatorio"
+                },
+                user_id: {
+                    bsonType: 'int',
+                    description: "El id_usuario debe ser un numero entero, y es obligatorio"
+                },
+                rating: {
+                    bsonType: "int",
+                    pattern: "^[1-5]$", 
+                    description: "La calificacion debe ser un numero entero entre 1 y 5, y es obligatorio"
+                },
+                comment: {
+                    bsonType: ['string', 'null'],
+                    maxLength:500,
+                    description: "El comentario debe ser un string y no puede superar los 500 caracteres"
+                },
+                createdAt: {
+                    bsonType: 'date',
+                    description: 'la fecha_creacion es obligatoria y debe ser un formato valido'
+                }
+            }
+            }
+        }
+});
+
+
+db.review.insertMany(
+    [
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 1,
+          "user_id": 2,
+          "rating": 4,
+          "comment": "Muy buen trabajo",
+          "createdAt": ISODate("2023-08-18T10:00:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 2,
+          "user_id": 3,
+          "rating": 5,
+          "comment": "Excelente servicio, lo recomiendo.",
+          "createdAt": ISODate("2023-08-18T11:30:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 3,
+          "user_id": 1,
+          "rating": 3,
+          "comment": "Cumplió con lo esperado.",
+          "createdAt": ISODate("2023-08-18T13:15:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 4,
+          "user_id": 5,
+          "rating": 2,
+          "comment": "No fue tan bueno como esperaba.",
+          "createdAt": ISODate("2023-08-18T14:45:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 5,
+          "user_id": 1,
+          "rating": 5,
+          "comment": "Increíble trabajo, muy satisfecho.",
+          "createdAt": ISODate("2023-08-18T16:30:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 1,
+          "user_id": 3,
+          "rating": 4,
+          "comment": "Buen servicio, lo recomiendo.",
+          "createdAt": ISODate("2023-08-19T09:00:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 2,
+          "user_id": 4,
+          "rating": 3,
+          "comment": "Podría haber sido mejor.",
+          "createdAt": ISODate("2023-08-19T10:45:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 3,
+          "user_id": 5,
+          "rating": 1,
+          "comment": "Muy decepcionado con el resultado.",
+          "createdAt": ISODate("2023-08-19T12:30:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 4,
+          "user_id": 2,
+          "rating": 5,
+          "comment": "Superó mis expectativas, excelente.",
+          "createdAt": ISODate("2023-08-19T14:00:00Z")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 5,
+          "user_id": 4,
+          "rating": 3,
+          "comment": "Un trabajo decente.",
+          "createdAt": ISODate("2023-08-19T15:30:00Z")
+        }
+])
+
+
+db.createCollection("category", {
+    capped: true,
+    size: 1000,
+    max: 10,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'name', 'description'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "El id_categoria debe ser un numero entero, y es obligatorio"
+                },
+                name: {
+                    bsonType: 'string',
+                    description: "el nombre_categoria debe contener minimo 20 caracteres, y es obligatorio"
+                },
+                description: {
+                    bsonType: 'string',
+                    description: 'La descripcion_categoria es obligatoria y debe ser un string',
+                },
+                icon: {
+                    bsonType: "string",
+                    description: "El icono_categoria debe ser un string valido (ej. fas fa-birthday-cake)"
+                }
+            }
+
+        }
+    }
+});
+
+
+db.category.insertMany([
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Reparaciones",
+      "description": "Servicios de reparación y mantenimiento en el hogar.",
+      "icon": "fas fa-tools"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Limpieza",
+      "description": "Servicios de limpieza y organización en el hogar o la oficina.",
+      "icon": "fas fa-broom"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Jardinería",
+      "description": "Cuidado y mantenimiento de jardines y áreas verdes.",
+      "icon": "fas fa-leaf"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Cuidado de Mascotas",
+      "description": "Cuidado de perros, gatos y otras mascotas.",
+      "icon": "fas fa-paw"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Reparto de Comida",
+      "description": "Entrega de alimentos a domicilio.",
+      "icon": "fas fa-pizza-slice"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Clases Particulares",
+      "description": "Clases de idiomas, música, deportes y más.",
+      "icon": "fas fa-graduation-cap"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Transporte",
+      "description": "Servicios de transporte de personas o paquetes.",
+      "icon": "fas fa-car"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Eventos",
+      "description": "Organización y planificación de eventos especiales.",
+      "icon": "fas fa-birthday-cake"
+    }
+  ]
+  )
