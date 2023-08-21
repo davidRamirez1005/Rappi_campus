@@ -2,8 +2,11 @@ use("db_campus_rappi");
 db.createCollection("counters");
 db.counters.insertMany([
     {_id : "userId", sequence_value : 0},
-    {_id : "shopkeeperId", sequence_value : 0}
-
+    {_id : "shopkeeperId", sequence_value : 0},
+    {_id : "paymentId", sequence_value : 0},
+    {_id : "taskId", sequence_value : 0},
+    {_id : "reviewId", sequence_value : 0},
+    {_id : "categoryId", sequence_value : 0}
 ]);
 
 function siguienteId(coleccion) {
@@ -214,7 +217,7 @@ db.createCollection("shopkeeper", {
                     }},
                 availability: {
                 bsonType: 'bool',
-                description: 'la fecha registrada es obligatoria'
+                description: 'la disponobilidad del tendero es obligatoria'
                 }
             }
         }
@@ -305,5 +308,107 @@ db.shopkeeper.insertMany([
             street: "Baker Street"
         },
         availability: false
+    } 
+]);
+/**
+ * ! payment
+ */
+use("db_campus_rappi");
+db.createCollection("payment", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'task_id', 'amount', 'paymentDate','paymentMethod','status'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                task_id: {
+                    bsonType: 'int',
+                    description: "el id de la tarea es obligatorio"
+                },
+                amount: {
+                    bsonType: 'int',
+                    description: 'El precio es obligatorio y debe ser numerico'
+                },
+                paymentDate: {
+                    bsonType: 'date',
+                    description: "la fecha es obligatorio"
+                },
+                paymentMethod : {
+                    "bsonType": "string",
+                    "items": {
+                        "enum": ["nequi", "bancolombia", "pse", "daviplata", "efectivo"]
+                    }
+                },
+                status: {
+                    "bsonType": "string",
+                    "description": "El estado es obligatorio",
+                }
+            }
+        }
+    }
+});    
+db.payment.insertMany([
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 1,
+        amount: 50000,
+        paymentDate: ISODate("2023-08-20"),
+        paymentMethod: "nequi",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 2,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "bancolombia",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 3,
+        amount: 20000,
+        paymentDate: ISODate("2023-08-26"),
+        paymentMethod: "bancolombia",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 4,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "efectivo",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 5,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod:"efectivo",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 6,
+        amount: 30000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "daviplata",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 7,
+        amount: 40000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "bancolombia",
+        status: "pendiente"
     } 
 ]);
