@@ -349,3 +349,59 @@ db.category.insertMany([
     }
   ]
   )
+
+
+use("db_campus_rappi");
+db.createCollection("rols", {
+    capped: true,
+    size: 1000,
+    max: 10,
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            additionalProperties: false,
+            required : ['_id', 'name_rol','rol_access'],
+            properties:{
+                _id:{
+                    bsonType: 'int',
+                    description : "El ID_ROL es un parametro obligatorio y debe ser un entero"
+                },
+                name_rol:{  
+                    bsonType: 'string',
+                    description : "El NOMBRE_ROL es un parametro obligatorio y debe ser un string"
+                },
+                description_rol:{  
+                    bsonType: 'string',
+                    description : "El DESCRIPCION_ROL es un parametro obligatorio y debe ser un string"
+                },
+                rol_access:{  
+                    bsonType: 'array',
+                    description : "El ACCESO_ROLES es un parametro obligatorio y debe ser un ARRAY"
+                }
+            }
+        }
+    }
+  })
+
+
+db.rols.insertOne({
+    _id: 1,
+    name_rol: "admin",
+    description_rol: "Rol de administrador con acceso a todas las colecciones",
+    rol_access: ["category", "user", "task", "shopkeeper", "review", "payment"]
+  });
+  
+  db.rols.insertOne({
+    _id: 2,
+    name_rol: "user",
+    description_rol: "Rol de usuario con acceso a la colección 'task', 'payment', 'review' y 'category'",
+    rol_access: ["task", "payment", "review","category"]
+  });
+  
+  db.rols.insertOne({
+    _id: 3,
+    name_rol: "shopkeeper",
+    description_rol: "Rol de comerciante con acceso a la colección 'task' 'payment' y 'review'",
+    rol_access: ["task", "review", "payment"]
+  });
+  
