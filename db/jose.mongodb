@@ -357,7 +357,7 @@ db.createCollection("payment", {
 db.payment.insertMany([
     {
         _id: Number(siguienteId("payment")),
-        task_id: 1,
+        task_id: 7,
         amount: 50000,
         paymentDate: ISODate("2023-08-20"),
         paymentMethod: "nequi",
@@ -365,7 +365,7 @@ db.payment.insertMany([
     },
     {
         _id: Number(siguienteId("payment")),
-        task_id: 2,
+        task_id: 8,
         amount: 10000,
         paymentDate: ISODate("2023-08-21"),
         paymentMethod: "bancolombia",
@@ -373,7 +373,7 @@ db.payment.insertMany([
     },
     {
         _id: Number(siguienteId("payment")),
-        task_id: 3,
+        task_id: 9,
         amount: 20000,
         paymentDate: ISODate("2023-08-26"),
         paymentMethod: "bancolombia",
@@ -381,7 +381,7 @@ db.payment.insertMany([
     },
     {
         _id: Number(siguienteId("payment")),
-        task_id: 4,
+        task_id: 10,
         amount: 10000,
         paymentDate: ISODate("2023-08-21"),
         paymentMethod: "efectivo",
@@ -389,7 +389,7 @@ db.payment.insertMany([
     },
     {
         _id: Number(siguienteId("payment")),
-        task_id: 5,
+        task_id:11,
         amount: 10000,
         paymentDate: ISODate("2023-08-21"),
         paymentMethod:"efectivo",
@@ -397,7 +397,7 @@ db.payment.insertMany([
     },
     {
         _id: Number(siguienteId("payment")),
-        task_id: 6,
+        task_id: 12,
         amount: 30000,
         paymentDate: ISODate("2023-08-21"),
         paymentMethod: "daviplata",
@@ -405,10 +405,65 @@ db.payment.insertMany([
     },
     {
         _id: Number(siguienteId("payment")),
-        task_id: 7,
+        task_id: 9,
         amount: 40000,
         paymentDate: ISODate("2023-08-21"),
         paymentMethod: "bancolombia",
         status: "pendiente"
     } 
+]);
+
+use("db_campus_rappi");
+const nombreV3 = "jose david ramirez"
+const ciudad = "bucaramanga"
+db.user.aggregate([
+    {
+        $lookup: {
+        from: "task",
+        localField: "_id",
+        foreignField: "user_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "user_tasks._id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "_id",
+        foreignField: "_id",
+        as: "tendero_relacionado"
+        }
+    },
+    {
+        $match: {
+        username : nombreV3
+        }
+    },
+    {
+        $project: {
+        _id: 1,
+        nombre_usuario: "$username",
+        email_usuario : "$email",
+        telefono_usuario : "$phone", 
+        direccion_usuario: "$address",
+        titulo : "$user_tasks.title",
+        descripcion : "$user_tasks.description",
+        estado_favor : "$user_tasks.status",
+        precio: "$task_payments.amount",
+        metodo_pago : "$task_payments.paymentMethod",
+        estado_pago : "$task_payments.status",
+        fecha_favor : "$user_tasks.createdAt",
+        nombre_tendero : "$tendero_relacionado.name"
+        }
+    }
 ]);

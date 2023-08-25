@@ -88,14 +88,14 @@ db.createCollection("task", {
         }
 });
 
-
+use("db_campus_rappi");
 db.task.insertMany([
     {
         _id: Number(siguienteId("task")),
         title: "titulo 1 - Recoger paquetes",
         description: "Se debe recoger un paquete para enviarlo por correspondencia",
-        user_id: 1,
-        shopkeeper_id: 1,
+        user_id: 15,
+        shopkeeper_id: 15,
         status: "Completado",
         address: {
             city: "Medellin",
@@ -108,8 +108,8 @@ db.task.insertMany([
         _id: Number(siguienteId("task")),
         title: "titulo 2 - Sacar perros",
         description: "Se debe sacar a pásear mis perrros",
-        user_id: 2,
-        shopkeeper_id: 2,
+        user_id: 16,
+        shopkeeper_id: 16,
         status: "Asignado",
         address: {
             city: "Bucaramanga",
@@ -122,9 +122,53 @@ db.task.insertMany([
     {
         _id: Number(siguienteId("task")),
         title: "titulo 3 - Comprar mercado ",
-        description: "Se deben comprar huevos, shampoo y condones",
-        user_id: 1,
-        shopkeeper_id: 3,
+        description: "Se deben comprar huevos, shampoo y perfume",
+        user_id: 15,
+        shopkeeper_id: 20,
+        status: "Solicitado",
+        address: {
+            city: "Bogotá",
+            street: "carrera 30 #23-24"
+        },
+        category_id: 2,
+        payment_id: 2,
+        createdAt: ISODate("2023-08-21")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 1 - Recoger paquetes",
+        description: "Se debe recoger un paquete para enviarlo por correspondencia",
+        user_id: 18,
+        shopkeeper_id: 21,
+        status: "Completado",
+        address: {
+            city: "Medellin",
+            street: "calle 20 N°23-24 (Versalles)"
+        },
+        category_id: 1,
+        payment_id: 1,
+        createdAt: ISODate("2023-08-19")
+    },{
+        _id: Number(siguienteId("task")),
+        title: "titulo 2 - Sacar perros",
+        description: "Se debe sacar a pásear mis perrros",
+        user_id: 17,
+        shopkeeper_id: 19,
+        status: "Asignado",
+        address: {
+            city: "Bucaramanga",
+            street: "calle 20 N°23-24 (San alonso)"
+        },
+        category_id: 2,
+        payment_id: 2,
+        createdAt: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 3 - Comprar mercado ",
+        description: "Se deben comprar huevos, shampoo y fresas",
+        user_id: 21,
+        shopkeeper_id: 21,
         status: "Solicitado",
         address: {
             city: "Bogotá",
