@@ -6,6 +6,7 @@ db.counters.insertMany([
     {_id : "categoryId", sequence_value : 0}
 ]);
 
+use("db_campus_rappi");
 function siguienteId(coleccion) {
     const sequenceDocument = db.counters.findOneAndUpdate(
         { _id: `${coleccion}Id` },
@@ -422,51 +423,79 @@ db.getCollection("task").aggregate([
     {$project: { "_id":0}}])
 
 //obtener todas las tareas ordenadas de por fecha y con su salida formateada V1 1.2.0
-db.getCollection("task").aggregate([
-   { $lookup: {
-    from: "payment",
-    localField: "user_tasks._id",
-    foreignField: "task_id",
-    as: "task_payments"
-    }
-},
-{
-    $lookup: {
-    from: "shopkeeper",
-    localField: "_id",
-    foreignField: "_id",
-    as: "tendero_relacionado"
-    }
-},   { $lookup: {
-    from: "payment",
-    localField: "user_tasks._id",
-    foreignField: "task_id",
-    as: "task_payments"
-    }
-},
-{
-    $lookup: {
-    from: "shopkeeper",
-    localField: "_id",
-    foreignField: "_id",
-    as: "tendero_relacionado"
-    }
-},
-    {$project: { 
-        "_id":0,
-        Titulo: "$title",
-        Usuario: "$user_id",
-        Rappi_Tendero: "$shopkeeper_id",
-        Descripcion: "$description"
-    }}, {$sort: {"createdAt": 1}},])
-   
+use("db_campus_rappi");
+    db.getCollection("task").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "payment",
+            localField: "payment_id",
+            foreignField: "task_id",
+            as: "task_payments"
+            }
+        },
+        {
+            $unwind: "$task_payments"
+        }
+        ,
+        {
+            $lookup: {
+            from: "shopkeeper",
+            localField: "shopkeeper_id",
+            foreignField: "_id",
+            as: "task_shopkeepers"
+            }
+        },
+        {
+            $unwind: "$task_shopkeepers"
+        },
+        {
+            $lookup: {
+            from: "category",
+            localField: "category_id",
+            foreignField: "_id",
+            as: "category_task"
+            }
+        },
+        {
+            $unwind: "$category_task"
+        },
+        {
+            $project: {
+            _id: 0,
+            Titulo: "$title",
+            Usuario: "$task_user.username",
+            Rappi_Tendero: "$task_shopkeepers.name",
+            Direccion_tendero: "$task_shopkeepers.address",
+            Descripcion: "$description",
+            Estado_pedido: "$status",
+            Direccion_pedido: {
+                Ciudad: "$address.city",
+                Calles: "$address.street"
+            },
+            Categoria_favor: "$category_task.name",
+            Precio: "$task_payments.amount",
+            Metodo_pago : "$task_payments.paymentMethod",
+            Estado_pago : "$task_payments.status",
+            Fecha_favor : "$createdAt"
+        }}]);
 
 
 
         // Consultas GET por parametros
 //listar tareas por id V1 1.1.0
 use("db_campus_rappi");
-db.getCollection("task").findOne({"_id": 7})
+db.getCollection("task").findOne({"_id": 2})
 
 //listar tareas realizadas un dia en especifico V1 1.2.0
 use("db_campus_rappi");
