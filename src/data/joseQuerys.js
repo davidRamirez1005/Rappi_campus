@@ -258,7 +258,7 @@ export const usuarioPendienteCiudadV3 = [
     }
 ];
 /**
- * ! obtener la descripcion del favor completo po un usuario en especifico V3 3.2.0
+ * ! obtener la descripcion del favor completo por un usuario en especifico V3 3.2.0
 */
 const nombreV3 = "jose david ramirez"
 export const usuarioFavor = [
@@ -337,7 +337,7 @@ export const usuarioFavorV331 = [
     },
     {
         $match: {
-        username : nombreV3
+        username : nombreV331
         }
     },
     {
