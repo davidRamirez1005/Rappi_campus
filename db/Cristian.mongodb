@@ -405,3 +405,97 @@ db.rols.insertOne({
     rol_access: ["task", "review", "payment"]
   });
   
+
+
+
+  //consultas task
+        // Consultas GET     
+// Obtener todos las tareas V1 1.1.0
+use("db_campus_rappi");
+db.getCollection("task").aggregate([{$project: { "_id":0}}])
+
+       
+//obtener todas las tareas completadas V1 1.2.0
+use("db_campus_rappi");
+db.getCollection("task").aggregate([
+    {$match: {"status": "Completado"}},
+    {$project: { "_id":0}}])
+
+//obtener todas las tareas ordenadas de por fecha y con su salida formateada V1 1.2.0
+db.getCollection("task").aggregate([
+   { $lookup: {
+    from: "payment",
+    localField: "user_tasks._id",
+    foreignField: "task_id",
+    as: "task_payments"
+    }
+},
+{
+    $lookup: {
+    from: "shopkeeper",
+    localField: "_id",
+    foreignField: "_id",
+    as: "tendero_relacionado"
+    }
+},   { $lookup: {
+    from: "payment",
+    localField: "user_tasks._id",
+    foreignField: "task_id",
+    as: "task_payments"
+    }
+},
+{
+    $lookup: {
+    from: "shopkeeper",
+    localField: "_id",
+    foreignField: "_id",
+    as: "tendero_relacionado"
+    }
+},
+    {$project: { 
+        "_id":0,
+        Titulo: "$title",
+        Usuario: "$user_id",
+        Rappi_Tendero: "$shopkeeper_id",
+        Descripcion: "$description"
+    }}, {$sort: {"createdAt": 1}},])
+   
+
+
+
+        // Consultas GET por parametros
+//listar tareas por id V1 1.1.0
+use("db_campus_rappi");
+db.getCollection("task").findOne({"_id": 7})
+
+//listar tareas realizadas un dia en especifico V1 1.2.0
+use("db_campus_rappi");
+const date = "2023-08-19"
+db.getCollection("task").aggregate([
+    {$match: {"createdAt": new Date(date)}},
+    {$project: { "_id":0}}])
+
+
+  //consultas review
+        // Consultas GET    
+//obtener todos los reviews v1.1.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([{$project: { "_id":0}}])
+       
+
+
+        // Consultas GET por parametros
+
+
+
+
+
+
+  //consultas category
+          // Consultas GET    
+
+//obtener todos las categorias v1.1.0
+use("db_campus_rappi");
+db.getCollection("category").aggregate([{$project: { "_id":0}}])
+
+        // Consultas GET por parametros
