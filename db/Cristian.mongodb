@@ -422,7 +422,7 @@ db.getCollection("task").aggregate([
     {$match: {"status": "Completado"}},
     {$project: { "_id":0}}])
 
-//obtener todas las tareas ordenadas de por fecha y con su salida formateada V1 1.2.0
+//obtener todas las tareas ordenadas de por fecha y con su salida formateada V1 1.3.0
 use("db_campus_rappi");
     db.getCollection("task").aggregate([
         {
@@ -490,20 +490,154 @@ use("db_campus_rappi");
             Fecha_favor : "$createdAt"
         }}]);
 
-
-
         // Consultas GET por parametros
 //listar tareas por id V1 1.1.0
 use("db_campus_rappi");
 db.getCollection("task").findOne({"_id": 2})
 
-//listar tareas realizadas un dia en especifico V1 1.2.0
+//Listar tareas segun su estado con salida formateada V1.2.0
 use("db_campus_rappi");
-const date = "2023-08-19"
+const state = "Solicitado"
+db.getCollection("task").aggregate([
+    {$match: {"status": state}},
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "payment_id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $unwind: "$task_payments"
+    }
+    ,
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "shopkeeper_id",
+        foreignField: "_id",
+        as: "task_shopkeepers"
+        }
+    },
+    {
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $project: {
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}
+   ])
+
+//listar tareas realizadas un dia en especifico y con su salida formateada V1 1.3.0
+use("db_campus_rappi");
+const date = "2023-08-20"
 db.getCollection("task").aggregate([
     {$match: {"createdAt": new Date(date)}},
-    {$project: { "_id":0}}])
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "payment_id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $unwind: "$task_payments"
+    }
+    ,
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "shopkeeper_id",
+        foreignField: "_id",
+        as: "task_shopkeepers"
+        }
+    },
+    {
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $project: {
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}
+   ])
 
+//----------------------------------------------------------------
 
   //consultas review
         // Consultas GET    
@@ -511,10 +645,86 @@ db.getCollection("task").aggregate([
 use("db_campus_rappi");
 db.getCollection("review").aggregate([{$project: { "_id":0}}])
        
+//obtener todos los reviews con salida formateada V1.2.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }
+    }]);
 
+//obtener todos los reviews  con salida formateada y ordenadas de mas rankeadas a menos V1.3.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }}
+    ,{
+        $sort: {
+          Calificacion: -1
+        }
+    }]);
 
         // Consultas GET por parametros
-
+use("db_campus_rappi");
+db.getCollection("review").aggregate([{$project: { "_id":0}}])
+               
 
 
 
