@@ -21,9 +21,11 @@
     "mongodb": "5.7.0",
     "morgan": "^1.10.0",
     "passport": "0.6.0",
+    "express-validator": "^7.0.1",
     "passport-http-bearer": "1.0.1"
   },
   "devDependencies": {
+    "express-routes-versioning": "^1.0.1",
     "jose": "4.14.4",
     "nodemon": "3.0.1",
     "reflect-metadata": "0.1.13",
