@@ -76,7 +76,9 @@ export const TaskDate = [
 /**
  * ! Listar tareas segun su estado con salida formateada V2 2.1.0
  */
-export const TaskByState= (state) => [
+export const TaskByState= async (state) => {
+    let pipeline ;
+    return pipeline =  [
     {$match: {"status": state}},
     {
         $lookup: {
@@ -142,7 +144,7 @@ export const TaskByState= (state) => [
         Estado_pago : "$task_payments.status",
         Fecha_favor : "$createdAt"
     }}
-   ];
+   ]};
 /**
  * ! listar tareas realizadas un dia en especifico y con su salida formateada V1 1.3.0
 
@@ -216,7 +218,7 @@ export const TaskByDay = (date) => [
    ]
 
    /**
-    * ? consultas para usuarios
+    * ? consultas para reviews
    */
   
   
@@ -417,8 +419,8 @@ export const categoryTotal = [
             Numero_de_pedidos: { $sum: 1 }
         }
     },
-    {$sort:{
-        "Numero_de_pedidos":-1
+    { $sort:{
+        "Numero_de_pedidos": -1
     }
     }
 ];
