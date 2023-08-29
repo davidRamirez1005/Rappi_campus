@@ -20,13 +20,82 @@ function siguienteId(coleccion) {
  */
 
 
+db.createCollection("task", {
+    capped: true,
+    size: 5000,
+    max: 70,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'title', 'description', 'user_id','shopkeeper_id','status', 'createdAt', "category_id","payment_id"],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "id_tarea del usuario"
+                },
+                title: {
+                    bsonType: 'string',
+                    description: "el titulo_tarea debe contener minimo 20 caracteres, y es obligatorio"
+                },
+                description: {
+                    bsonType: 'string',
+                    description: 'La descripcion es obligatoria y debe ser un string',
+                },
+                user_id: {
+                    bsonType: 'int',
+                    description: "El id_usuario debe ser un numero entero, y es obligatorio"
+                },
+                shopkeeper_id: {
+                    bsonType: "int",
+                    description: "El id_tendero debe ser un numero entero, y es obligatorio"
+                },
+                status: {
+                    enum: ["Solicitado", "Asignado", "Completado", "Cancelado", "en Proceso"],
+                    description: "Debe ser un estado valido es decir, 'Solicitado', 'Asignado', 'Completado', 'Cancelado', o 'en Proceso'"
+                },
+                createdAt: {
+                    bsonType: 'date',
+                    description: 'la fecha_creacion es obligatoria y debe ser un formato valido'
+                },
+                category_id: {
+                    bsonType: "int",
+                    description: "El id_categoria debe ser un numero entero, y es obligatorio"
+                },
+                address: {
+                    bsonType: "object",
+                    required: ["city", "street"],
+                    properties: {
+                        city: {
+                            enum: ["Bogotá","Medellin","Cali","Barranquilla","Cartagena","Cucuta","Bucaramanga","Pereira","Santa Marta","Pasto","Manizales","Neiva","Armenia","Villavicencio","Valledupar","Montería","Sincelejo"],
+                            description: "Ciudad debe ser una ciudad en la que estemos presentes"
+                        },
+                        street: {
+                            bsonType: "string",
+                            pattern: "^[a-zA-Z0-9,|°#\\-() ]+$", 
+                            minLength: 5,
+                            maxLength: 100, 
+                            description: "La dirección debe cumplir con ciertos criterios."
+                        }
+                        }
+                    },
+                payment_id: {
+                    bsonType: "int",
+                    description: "El id_pago debe ser un numero entero, y es obligatorio"
+                    }
+                }
+            }
+        }
+});
+
+use("db_campus_rappi");
 db.task.insertMany([
     {
         _id: Number(siguienteId("task")),
         title: "titulo 1 - Recoger paquetes",
         description: "Se debe recoger un paquete para enviarlo por correspondencia",
-        user_id: 1,
-        shopkeeper_id: 1,
+        user_id: 15,
+        shopkeeper_id: 15,
         status: "Completado",
         address: {
             city: "Medellin",
@@ -39,8 +108,8 @@ db.task.insertMany([
         _id: Number(siguienteId("task")),
         title: "titulo 2 - Sacar perros",
         description: "Se debe sacar a pásear mis perrros",
-        user_id: 2,
-        shopkeeper_id: 2,
+        user_id: 16,
+        shopkeeper_id: 16,
         status: "Asignado",
         address: {
             city: "Bucaramanga",
@@ -53,9 +122,53 @@ db.task.insertMany([
     {
         _id: Number(siguienteId("task")),
         title: "titulo 3 - Comprar mercado ",
-        description: "Se deben comprar huevos, shampoo y condones",
-        user_id: 1,
-        shopkeeper_id: 3,
+        description: "Se deben comprar huevos, shampoo y perfume",
+        user_id: 15,
+        shopkeeper_id: 20,
+        status: "Solicitado",
+        address: {
+            city: "Bogotá",
+            street: "carrera 30 #23-24"
+        },
+        category_id: 2,
+        payment_id: 2,
+        createdAt: ISODate("2023-08-21")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 1 - Recoger paquetes",
+        description: "Se debe recoger un paquete para enviarlo por correspondencia",
+        user_id: 18,
+        shopkeeper_id: 21,
+        status: "Completado",
+        address: {
+            city: "Medellin",
+            street: "calle 20 N°23-24 (Versalles)"
+        },
+        category_id: 1,
+        payment_id: 1,
+        createdAt: ISODate("2023-08-19")
+    },{
+        _id: Number(siguienteId("task")),
+        title: "titulo 2 - Sacar perros",
+        description: "Se debe sacar a pásear mis perrros",
+        user_id: 17,
+        shopkeeper_id: 19,
+        status: "Asignado",
+        address: {
+            city: "Bucaramanga",
+            street: "calle 20 N°23-24 (San alonso)"
+        },
+        category_id: 2,
+        payment_id: 2,
+        createdAt: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 3 - Comprar mercado ",
+        description: "Se deben comprar huevos, shampoo y fresas",
+        user_id: 21,
+        shopkeeper_id: 21,
         status: "Solicitado",
         address: {
             city: "Bogotá",
