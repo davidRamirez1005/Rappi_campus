@@ -1,9 +1,7 @@
-// import { validationResult } from 'express-validator';
-// import {validationIncidencia} from '../../validator/validaciones.js'
 import siguienteId from '../../helpers/autoincrementoId.js'
 import genCollection from '../../helpers/db.js';
-//import { validationResult } from 'express-validator';
-//import {validationPayment} from '../../validator/validaciones.js'
+import { validationResult } from 'express-validator';
+import {validationTask} from '../../validator/validaciones.js'
 
 
 /**
@@ -41,4 +39,90 @@ export const getTaskByIdV1 = async(req, res) =>{
         console.log(error);
     }
 }
+
+/**
+ * ? Crear una tarea/pedido
+ */
+
+export const NewTask = async(req, res) =>{
+    if (!req.rateLimit) return;
+
+    try {
+        await Promise.all(validationTask.map(rule => rule.run(req)));
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        let coleccion = await genCollection('task')
+        const { Titulo:title, Descripcion:description,Id_Usuario:user_id,Id_Tendero:shopkeeper_id,Estado: status ,Id_Categoria: category_id ,Ciudad :city ,direccion: street,Id_Pago:payment_id } = req.body;
+        const newDocument = {
+            _id: await siguienteId( "task"),
+            title: title,
+            description: description,
+            user_id: user_id,
+            shopkeeper_id: shopkeeper_id,
+            status: status,
+            createdAt: new Date(),
+            category_id: category_id,
+            address: {
+                city: city,
+                street: street
+            },
+            payment_id: payment_id
+        };
+
+        let result = await coleccion.insertOne(newDocument);
+        console.log(result);
+        res.status(201).send({ status: 201, message: 'documento creado con exito' });
+    } catch (error) {
+        console.log(error);
+        res.status(406).send('no se ha podido crear el documento');
+    }
+}
+
+
+/**
+ * ? Actualizar el estado de una tarea
+ */
+
+export const updateTask = async(req, res) =>{
+    if (!req.rateLimit) return;
+
+    try {
+        await Promise.all(validationTask.map(rule => rule.run(req)));
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        let coleccion = await genCollection('task')
+        const { Titulo:title, Descripcion:description,Id_Usuario:user_id,Id_Tendero:shopkeeper_id,Estado: status ,Id_Categoria: category_id ,Ciudad :city ,direccion: street,Id_Pago:payment_id } = req.body;
+        const newDocument = {
+            _id: await siguienteId( "task"),
+            title: title,
+            description: description,
+            user_id: user_id,
+            shopkeeper_id: shopkeeper_id,
+            status: status,
+            createdAt: new Date(),
+            category_id: category_id,
+            address: {
+                city: city,
+                street: street
+            },
+            payment_id: payment_id
+        };
+
+        let result = await coleccion.insertOne(newDocument);
+        console.log(result);
+        res.status(201).send({ status: 201, message: 'documento creado con exito' });
+    } catch (error) {
+        console.log(error);
+        res.status(406).send('no se ha podido crear el documento');
+    }
+}
+
 

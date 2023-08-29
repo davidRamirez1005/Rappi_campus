@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import routesVersioning  from 'express-routes-versioning';
 
 import {limitget} from '../config/configLimit.js'
-import {getAllReviewV1, getReviewByIdV1} from '../controllers/v1/reviewRouterV1.js'
+import {getAllReviewV1, getReviewByIdV1, NewReview} from '../controllers/v1/reviewRouterV1.js'
 import {getAllReviewV2, getReviewByIdV2} from '../controllers/v2/reviewRouterV2.js'
 import {getAllReviewV3, getReviewByIdV3} from '../controllers/v3/reviewRouterV3.js'
 
@@ -37,6 +37,15 @@ appReview.get('/:id',  version({
     "~1.1.0": getReviewByIdV1,
     "~2.1.0": getReviewByIdV2,
     "~3.1.0": getReviewByIdV3
+}))
+
+/**
+ * ! GET
+ * ? Crear una reseña V1 1.1.0
+ * * http://127.10.10.10:5050/review
+ */
+appReview.post('/',  version({
+    "~1.1.0": NewReview
 }))
 
 
