@@ -1,9 +1,8 @@
-// import { validationResult } from 'express-validator';
-// import {validationIncidencia} from '../../validator/validaciones.js'
+
 import siguienteId from '../../helpers/autoincrementoId.js'
 import genCollection from '../../helpers/db.js';
-//import { validationResult } from 'express-validator';
-//import {validationPayment} from '../../validator/validaciones.js'
+import { validationResult } from 'express-validator';
+import {validationCategory} from '../../validator/validaciones.js'
 
 
 /**
@@ -42,3 +41,36 @@ export const getCategoryByIdV1 = async(req, res) =>{
     }
 }
 
+
+/**
+ * ? Crear un review del servicio
+ */
+
+export const NewCategory = async(req, res) =>{
+    if (!req.rateLimit) return;
+
+    try {
+        await Promise.all(validationCategory.map(rule => rule.run(req)));
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        let coleccion = await genCollection('category')
+        const { Nombre :name, Descripcion:description,Icono:icon} = req.body;
+        const newDocument = {
+            _id: await siguienteId( "category"),
+            name: name,
+            description: description,
+            icon: icon,
+        };
+       
+        let result = await coleccion.insertOne(newDocument);
+        console.log(result);
+        res.status(201).send({ status: 201, message: 'documento creado con exito' });
+    } catch (error) {
+        console.log(error);
+        res.status(406).send('no se ha podido crear el documento');
+    }
+}

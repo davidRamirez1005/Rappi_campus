@@ -45,8 +45,12 @@ const validationReview = [
     check('Comentario').optional().isString().withMessage('el comenario es opcional y debe ser string'),
 ];
 
-
-export { validationUser, validationShopkeeper, validationPayment, validationTask, validationReview };
+const validationCategory = [
+    check('Nombre').notEmpty().isString().withMessage('el Nombre es obligatorio y debe ser numerico'),
+    check('Descripcion').notEmpty().isString().withMessage('La Descripcion es obligatoria y debe ser string '),
+    check('Icono').optional().isString().withMessage('el Icono es opcional y debe ser string que sea fas'),
+];
+export { validationUser, validationShopkeeper, validationPayment, validationTask, validationReview , validationCategory};
 
 
 /** _id: Number(siguienteId("task")),

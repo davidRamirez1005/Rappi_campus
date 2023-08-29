@@ -3,7 +3,7 @@
 import siguienteId from '../../helpers/autoincrementoId.js'
 import genCollection from '../../helpers/db.js';
 
-import {TaskDate, TaskByDay} from '../../Data/CristianQuerys.js'
+import {TaskDate, TaskByDay} from '../../data/CristianQuerys.js'
 //import { validationResult } from 'express-validator';
 //import {validationPayment} from '../../validator/validaciones.js'
 

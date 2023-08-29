@@ -3,7 +3,7 @@
 import siguienteId from '../../helpers/autoincrementoId.js'
 import genCollection from '../../helpers/db.js';
 
-import {reviewV2, reviewByUser} from '../../Data/CristianQuerys.js'
+import {reviewV2, reviewByUser} from '../../data/CristianQuerys.js'
 //import { validationResult } from 'express-validator';
 //import {validationPayment} from '../../validator/validaciones.js'
 

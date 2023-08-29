@@ -3,9 +3,9 @@ import dotenv from 'dotenv';
 import routesVersioning  from 'express-routes-versioning';
 
 import {limitget} from '../config/configLimit.js'
-import {getAllCategoryV1, getCategoryByIdV1} from '../controllers/v1/categoryRouterV1.js'
+import {getAllCategoryV1, getCategoryByIdV1, NewCategory} from '../controllers/v1/categoryRouterV1.js'
 import {getAllcategoryV2, getCategoryByIdV2} from '../controllers/v2/categoryRouterV2.js'
-import {getAllCategoryV3,} from '../controllers/v3/categoryRouterV3.js'
+import {getAllCategoryV3} from '../controllers/v3/categoryRouterV3.js'
 
 dotenv.config();
 const appCategory = Router()
@@ -35,6 +35,15 @@ appCategory.get('/',  version({
 appCategory.get('/:id',  version({
     "~1.1.0": getCategoryByIdV1,
     "~2.1.0": getCategoryByIdV2
+}))
+
+/**
+ * ! POST
+ * ? Crear una categoria V1 1.1.0
+ * * http://127.10.10.10:5050/category
+ */
+appCategory.post('/',  version({
+    "~1.1.0": NewCategory
 }))
 
 
