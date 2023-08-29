@@ -958,7 +958,7 @@ db.getCollection("category").findOne({"_id":2})
 use("db_campus_rappi");
 db.getCollection("category").aggregate([
     {
-        $match: { "_id": 2 }
+        $match: { "_id": id }
     },
     {
         $project: {

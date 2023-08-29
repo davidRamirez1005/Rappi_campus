@@ -4,137 +4,15 @@
  */
 
 /**
- * ! obtener todos las tareas V1 1.1.0
+ * ! Obtener todas las tareas ordenadas por fecha y con su salida formateada V1 1.3.0
+ V3 3.1.0
  */
-
-export const task = [
-    {
-        $project: {
-            _id: 0,
-        }
-    }
-];
-/**
- * ! obtener todos los tenderos con disponibilidad V1 1.1.1
- */
-export const tenderosDis = [
-    {
-        $match : { availability : true}
-    },
-    {
-        $project: {
-            _id: 0,
-        }
-    }
-];
-/**
- * ! obtener todos los tenderos por medio del nombre V2 2.1.0
- */
-const param = "Michael Johnson"
-export const tenderoNombre = [
-    {
-        $match : { name : param}
-    },
-    {
-        $project: {
-            _id: 0,
-        }
-    }
-];
-/**
- * ! obtener todos los tenderos por medio de la cedula V2 2.2.0
- */
-const param2 = "Michael Johnson"
-export const tenderosCedula = [
-    {
-        $match : { identification : param2}
-    },
-    {
-        $project: {
-            _id: 0,
-        }
-    }
-];
-/**
- * ? consultas para usuarios
-*/
-
-
-
-
-
-
-
-
-
-/**
- * ! obtener todos los usuarios que residen en bucaramanga V1 1.2.0
- */
-export const userBgm = [
-    {
-        $match : { "address.city" : "bucaramanga"}
-    },
-    {
-        $project: {
-            _id: 0,
-        }
-    }
-];
-/**
- * ! obtener todos los usuarios que se registraron antes de una fecha especifica V1 1.3.0
- */
-const fecha = "2023-08-31"
-export const usuarioFecha = [
-    {
-        $match : { registrationDate: { $lt: new Date(fecha) }}
-    },
-    {
-        $project: {
-            _id: 0,
-        }
-    }
-];
-/**
- * ! obtener todos los pedidos que ha hecho un usuario por medio del nombre del usuario V2 2.0.0
- */
-const nombre = "jose david ramirez"
-export const usuarioPedido = [
+export const TaskDate = [
     {
         $lookup: {
-        from: "task",
-        localField: "_id",
-        foreignField: "user_id",
-        as: "user_tasks"
-        }
-    },
-    {
-        $match: {
-            username : nombre
-        }
-    },
-    {
-        $unwind: "$user_tasks"
-    },
-    {
-        $project: {
-            _id: 1, 
-            username: 1,
-            email: 1,
-            phone : 1,
-            'user_tasks.title': 1,
-            'user_tasks.description': 1
-        }
-    }
-];
-/**
- * ! obtener todos los usuarios que tienen pago pendiente V2 2.1.0
- */
-export const usuarioPendiente = [
-    {
-        $lookup: {
-        from: "task",
-        localField: "_id",
-        foreignField: "user_id",
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
         as: "user_tasks"
         }
     },
@@ -144,228 +22,421 @@ export const usuarioPendiente = [
     {
         $lookup: {
         from: "payment",
-        localField: "user_tasks._id",
+        localField: "payment_id",
         foreignField: "task_id",
         as: "task_payments"
         }
     },
     {
-        $match: {
-        "task_payments.status": "pendiente"
-        }
-    },
-    {
-        $project: {
-        _id: 1,
-        username: 1,
-        email: 1,
-        phone: 1,
-        address: 1,
-        registrationDate: 1,
-        pendingPayments: {
-            $filter: {
-            input: "$task_payments",
-            as: "payment",
-            cond: { $eq: ["$$payment.status", "pendiente"] }
-            }
-        }
-        }
+        $unwind: "$task_payments"
     }
-];
-/**
- * ! obtener todos los usuarios que tienen pago pendiente y residen en una ciudad en especifico V3 3.0.0
- */
-const ciudad = "bucaramanga"
-export const usuarioPendienteCiudad = [
-    {
-        $lookup: {
-        from: "task",
-        localField: "_id",
-        foreignField: "user_id",
-        as: "user_tasks"
-        }
-    },
-    {
-        $unwind: "$user_tasks"
-    },
-    {
-        $lookup: {
-        from: "payment",
-        localField: "user_tasks._id",
-        foreignField: "task_id",
-        as: "task_payments"
-        }
-    },
-    {
-        $match: {
-        "task_payments.status": "pendiente",
-        "address.city" : ciudad
-        }
-    },
-    {
-        $project: {
-        _id: 1,
-        username: 1,
-        email: 1,
-        phone: 1,
-        address: 1,
-        pendingPayments: {
-            $filter: {
-            input: "$task_payments",
-            as: "payment",
-            cond: { $eq: ["$$payment.status", "pendiente"] }
-            }
-        }
-        }
-    }
-];
-/**
- * ! obtener todos los usuarios que tienen pago pendiente y residen en una ciudad en especifico con descripcion del favor V3 3.1.1
- */
-const ciudadV3 = "bucaramanga"
-export const usuarioPendienteCiudadV3 = [
-    {
-        $lookup: {
-        from: "task",
-        localField: "_id",
-        foreignField: "user_id",
-        as: "user_tasks"
-        }
-    },
-    {
-        $unwind: "$user_tasks"
-    },
-    {
-        $lookup: {
-        from: "payment",
-        localField: "user_tasks._id",
-        foreignField: "task_id",
-        as: "task_payments"
-        }
-    },
-    {
-        $match: {
-        "task_payments.status": "pendiente",
-        "address.city" : ciudadV3
-        }
-    },
-    {
-        $project: {
-        _id: 1,
-        username: 1,
-        email: 1,
-        phone: 1,
-        address: 1,
-        pendingPayments: {
-            $filter: {
-            input: "$task_payments",
-            as: "payment",
-            cond: { $eq: ["$$payment.status", "pendiente"] }
-            }
-        },
-        titulo : "$user_tasks.title",
-        descripcion : "$user_tasks.description"
-        }
-    }
-];
-/**
- * ! obtener la descripcion del favor completo po un usuario en especifico V3 3.2.0
-*/
-const nombreV3 = "jose david ramirez"
-export const usuarioFavor = [
-    {
-        $lookup: {
-        from: "task",
-        localField: "_id",
-        foreignField: "user_id",
-        as: "user_tasks"
-        }
-    },
-    {
-        $unwind: "$user_tasks"
-    },
-    {
-        $lookup: {
-        from: "payment",
-        localField: "user_tasks._id",
-        foreignField: "task_id",
-        as: "task_payments"
-        }
-    },
-    {
-        $match: {
-        username : nombreV3
-        }
-    },
-    {
-        $project: {
-        _id: 1,
-        nombre_usuario: "$username",
-        email_usuario : "$email",
-        telefono_usuario : "$phone", 
-        direccion_usuario: "$address",
-        titulo : "$user_tasks.title",
-        descripcion : "$user_tasks.description",
-        estado_favor : "$user_tasks.status",
-        precio: "$task_payments.amount",
-        metodo_pago : "$task_payments.paymentMethod",
-        estado_pago : "$task_payments.status",
-        fecha_favor : "$user_tasks.createdAt"
-        }
-    }
-];
-/**
- * ! obtener la descripcion del favor completo po un usuario en especifico y el tendero que atendió el favor V3 3.3.1
-*/
-const nombreV331 = "jose david ramirez"
-export const usuarioFavorV331 = [
-    {
-        $lookup: {
-        from: "task",
-        localField: "_id",
-        foreignField: "user_id",
-        as: "user_tasks"
-        }
-    },
-    {
-        $unwind: "$user_tasks"
-    },
-    {
-        $lookup: {
-        from: "payment",
-        localField: "user_tasks._id",
-        foreignField: "task_id",
-        as: "task_payments"
-        }
-    },
+    ,
     {
         $lookup: {
         from: "shopkeeper",
-        localField: "_id",
+        localField: "shopkeeper_id",
         foreignField: "_id",
-        as: "tendero_relacionado"
+        as: "task_shopkeepers"
         }
     },
     {
-        $match: {
-        username : nombreV3
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
         }
+    },
+    {
+        $unwind: "$category_task"
     },
     {
         $project: {
-        _id: 1,
-        nombre_usuario: "$username",
-        email_usuario : "$email",
-        telefono_usuario : "$phone", 
-        direccion_usuario: "$address",
-        titulo : "$user_tasks.title",
-        descripcion : "$user_tasks.description",
-        estado_favor : "$user_tasks.status",
-        precio: "$task_payments.amount",
-        metodo_pago : "$task_payments.paymentMethod",
-        estado_pago : "$task_payments.status",
-        fecha_favor : "$user_tasks.createdAt",
-        nombre_tendero : "$tendero_relacionado.name"
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}];
+
+/**
+ * ! Listar tareas segun su estado con salida formateada V2 2.1.0
+ */
+export const TaskByState= (state) => [
+    {$match: {"status": state}},
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "payment_id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $unwind: "$task_payments"
+    }
+    ,
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "shopkeeper_id",
+        foreignField: "_id",
+        as: "task_shopkeepers"
+        }
+    },
+    {
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $project: {
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}
+   ];
+/**
+ * ! listar tareas realizadas un dia en especifico y con su salida formateada V1 1.3.0
+
+ */
+export const TaskByDay = (date) => [
+    {$match: {"createdAt": new Date(date)}},
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "payment_id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $unwind: "$task_payments"
+    }
+    ,
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "shopkeeper_id",
+        foreignField: "_id",
+        as: "task_shopkeepers"
+        }
+    },
+    {
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $project: {
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}
+   ]
+
+   /**
+    * ? consultas para usuarios
+   */
+  
+  
+/**
+* ! obtener todos los reviews con salida formateada V2 2.1.0
+*/
+export const reviewV2 = [
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "task",
+        localField: "task_id",
+        foreignField: "_id",
+        as: "review_tasks"
+        }
+    },
+    {
+        $unwind: "$review_tasks"
+    },
+    {
+        $project: {
+        _id: 0,
+        Calificacion: "$rating",
+       Comentario: "$comment",
+        Usuario: "$user_tasks.username",
+       
+        
+    }
+}];
+  
+
+/**
+ * ! //obtener todos los reviews  con salida formateada y ordenadas de mas rankeadas a menos V3 3.1.0
+ */
+export const reviewOrder = [
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "task",
+        localField: "task_id",
+        foreignField: "_id",
+        as: "review_tasks"
+        }
+    },
+    {
+        $unwind: "$review_tasks"
+    },
+    {
+        $project: {
+        _id: 0,
+        Calificacion: "$rating",
+       Comentario: "$comment",
+        Usuario: "$user_tasks.username",
+       
+        
+    }}
+,{
+    $sort: {
+      Calificacion: -1
+    }
+}];
+/**
+ * ! Obtener los review por nombre de usuario con salida formateada V2 2.1.0
+*/
+export const reviewByUser = (nameUser) => [
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "task",
+        localField: "task_id",
+        foreignField: "_id",
+        as: "review_tasks"
+        }
+    },
+    {
+        $unwind: "$review_tasks"
+    },
+    {
+        $project: {
+        _id: 0,
+        Calificacion: "$rating",
+       Comentario: "$comment",
+        Usuario: "$user_tasks.username",
+       
+        
+    }}
+,{
+    $match: {
+        Usuario: nameUser
+    }
+}];
+/**
+ * ! Obtener los review por rating con salida formateada V3 3.1.0
+ */
+
+export const reviewByRating =(nota) => [
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "task",
+        localField: "task_id",
+        foreignField: "_id",
+        as: "review_tasks"
+        }
+    },
+    {
+        $unwind: "$review_tasks"
+    },
+    {
+        $project: {
+        _id: 0,
+        Calificacion: "$rating",
+       Comentario: "$comment",
+        Usuario: "$user_tasks.username",
+       
+        
+    }},
+    {
+        $match: {
+            Calificacion: {$eq: nota}
+        },
+    },
+];
+
+/**
+ * ! Peticiones get para category
+ */
+
+/**
+ * ! Obtener todos las categorias ordenadas alfabeticamente por nombre y con salida formateada v2 2.1.0
+ */
+export const categoryOrder =[{$project: { "_id":0, Nombre_categoria: "$name",
+Descripcion_categoria: "$description",
+Icono_FAS: "$icon"}}, {$sort: {
+  "Nombre_categoria": 1
+}}]
+
+/**
+ * ! obtener las cantidades de pedidos que se han realizado de todas las categorias disponibles V3 3.1.0
+ */
+
+export const categoryTotal = [
+    {
+        $lookup: {
+            from: "category",
+            localField: "category_id",
+            foreignField: "_id",
+            as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $group: {
+            _id: "$category_id",
+            Nombre_categoria: { $first: "$category_task.name" },
+            Numero_de_pedidos: { $sum: 1 }
+        }
+    },
+    {$sort:{
+        "Numero_de_pedidos":-1
+    }
+    }
+];
+
+
+/**
+ * ! listar por id las categorias pero con la salida formateada V3 3.1.0
+ */
+export const categoryById = (parametro) =>[
+    {
+        $match: { "_id": parametro }
+    },
+    {
+        $project: {
+            _id: 0,
+          Nombre_categoria: "$name",
+          Descripcion_categoria: "$description",
+          Icono_FAS: "$icon"
         }
     }
 ];
