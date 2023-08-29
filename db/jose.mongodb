@@ -393,7 +393,7 @@ db.payment.insertMany([
         amount: 10000,
         paymentDate: ISODate("2023-08-21"),
         paymentMethod:"efectivo",
-        status: "aprobado"
+        status: "pendiente"
     },
     {
         _id: Number(siguienteId("payment")),
@@ -410,5 +410,61 @@ db.payment.insertMany([
         paymentDate: ISODate("2023-08-21"),
         paymentMethod: "bancolombia",
         status: "pendiente"
-    } 
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 8,
+        amount: 25000,
+        paymentDate: ISODate("2023-08-30"),
+        paymentMethod: "nequi",
+        status: "pendiente"
+    },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 9,
+            amount: 25000,
+            paymentDate: ISODate("2023-08-30"),
+            paymentMethod: "nequi",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 10,
+            amount: 5000,
+            paymentDate: ISODate("2023-08-31"),
+            paymentMethod: "bancolombia",
+            status: "aprobado"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 11,
+            amount: 30000,
+            paymentDate: ISODate("2023-09-01"),
+            paymentMethod: "daviplata",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 12,
+            amount: 15000,
+            paymentDate: ISODate("2023-09-02"),
+            paymentMethod: "efectivo",
+            status: "aprobado"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 13,
+            amount: 20000,
+            paymentDate: ISODate("2023-09-03"),
+            paymentMethod: "nequi",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 14,
+            amount: 10000,
+            paymentDate: ISODate("2023-09-04"),
+            paymentMethod: "bancolombia",
+            status: "pendiente"
+        }
 ]);
