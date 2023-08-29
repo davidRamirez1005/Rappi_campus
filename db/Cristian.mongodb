@@ -1,11 +1,11 @@
-use("db_campus_rappi");
 //db.createCollection("counters");
-db.counters.insertMany([
+/*db.counters.insertMany([
     {_id : "taskId", sequence_value : 0},
     {_id : "reviewId", sequence_value : 0},
     {_id : "categoryId", sequence_value : 0}
-]);
+]);*/
 
+use("db_campus_rappi");
 function siguienteId(coleccion) {
     const sequenceDocument = db.counters.findOneAndUpdate(
         { _id: `${coleccion}Id` },
@@ -18,6 +18,7 @@ function siguienteId(coleccion) {
 /**
  * ! task
  */
+
 
 db.createCollection("task", {
     capped: true,
@@ -35,7 +36,6 @@ db.createCollection("task", {
                 },
                 title: {
                     bsonType: 'string',
-                    minLength: 20,
                     description: "el titulo_tarea debe contener minimo 20 caracteres, y es obligatorio"
                 },
                 description: {
@@ -175,9 +175,176 @@ db.task.insertMany([
             street: "carrera 30 #23-24"
         },
         category_id: 2,
-        payment_id: 2,
+        payment_id: 3,
         createdAt: ISODate("2023-08-21")
-    }
+    },
+        {
+        _id: Number(siguienteId("task")),
+            title: "Reparación de jardineria",
+            description: "Se necesita reparar el jardin que esta vuelto nada.",
+            user_id: 4,
+            shopkeeper_id: 5,
+            status: "Solicitado",
+            createdAt: ISODate("2023-08-22"),
+            category_id: 2,
+            address: {
+                city: "Bogotá",
+                street: "Calle 123"
+            },
+            payment_id: 4 
+        },
+        {
+        _id: Number(siguienteId("task")),
+            title: "Limpieza a fondo",
+            description: "Necesito una limpieza profunda para mi apartamento.",
+            user_id: 4,
+            shopkeeper_id: 6,
+            status: "Asignado",
+            createdAt: ISODate("2023-08-23"),
+            category_id: 3,
+            address: {
+                city: "Medellin",
+                street: "Carrera 456"
+            },
+            payment_id: 5
+        },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Podar arbustos en el jardín",
+                description: "Necesito que alguien poda los arbustos en mi jardín trasero.",
+                user_id: 3,
+                shopkeeper_id: 6,
+                status: "Completado",
+                createdAt: ISODate("2023-08-24"),
+                category_id: 2,
+                address: {
+                    city: "Cali",
+                    street: "Avenida 789"
+                },
+                payment_id: 6
+            },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Cuidado de perro durante el fin de semana",
+                description: "Requiero alguien que cuide de mi perro mientras estoy fuera durante el fin de semana.",
+                user_id: 4,
+                shopkeeper_id: 2,
+                status: "en Proceso",
+                createdAt: ISODate("2023-08-25"),
+                category_id: 3,
+                address: {
+                    city: "Barranquilla",
+                    street: "Calle 234"
+                },
+                payment_id: 7
+            },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Entrega de comida a domicilio",
+                description: "Necesito que me traigan una pizza a mi casa.",
+                user_id: 5,
+                shopkeeper_id: 7,
+                status: "Solicitado",
+                createdAt: ISODate("2023-08-26"),
+                category_id: 4,
+                address: {
+                    city: "Cartagena",
+                    street: "Carrera 567"
+                },
+                payment_id: 8
+            },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Clases de piano para principiantes",
+                    description: "Busco un profesor de piano para dar clases a un principiante.",
+                    user_id: 6,
+                    shopkeeper_id: 2,
+                    status: "Asignado",
+                    createdAt: ISODate("2023-08-27"),
+                    category_id: 5,
+                    address: {
+                        city: "Cucuta",
+                        street: "Calle 678"
+                    },
+                    payment_id: 9
+                },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Transporte al aeropuerto",
+                    description: "Necesito un conductor que me lleve al aeropuerto mañana temprano.",
+                    user_id: 7,
+                    shopkeeper_id: 4,
+                    status: "en Proceso",
+                    createdAt: ISODate("2023-08-28"),
+                    category_id: 6,
+                    address: {
+                        city: "Bucaramanga",
+                        street: "Avenida 789"
+                    },
+                    payment_id: 10
+                },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Planificación de fiesta de cumpleaños",
+                    description: "Busco a alguien que me ayude a organizar una fiesta de cumpleaños para mi hijo.",
+                    user_id: 8,
+                    shopkeeper_id: 8,
+                    status: "Solicitado",
+                    createdAt: ISODate("2023-08-29"),
+                    category_id: 8,
+                    address: {
+                        city: "Pereira",
+                        street: "Carrera 123"
+                    },
+                    payment_id: 11
+                },
+            
+      
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Reparación de filtro de aire acondicionado",
+                        description: "Necesito que alguien repare el filtro de mi unidad de aire acondicionado.",
+                        user_id: 4,
+                        shopkeeper_id: 1,
+                        status: "Completado",
+                        createdAt: ISODate("2023-08-30"),
+                        category_id: 1,
+                        address: {
+                            city: "Santa Marta",
+                            street: "Calle 789"
+                        },
+                        payment_id: 12
+                    },
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Clases de inglés avanzado",
+                        description: "Estoy interesado en tomar clases de inglés avanzado para mejorar mi fluidez.",
+                        user_id: 4,
+                        shopkeeper_id: 2,
+                        status: "Solicitado",
+                        createdAt: ISODate("2023-08-31"),
+                        category_id: 5,
+                        address: {
+                            city: "Pasto",
+                            street: "Carrera 456"
+                        },
+                        payment_id: 13
+                    },
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Corte de césped",
+                        description: "Necesito que alguien corte el césped en mi jardín delantero.",
+                        user_id: 6,
+                        shopkeeper_id: 3,
+                        status: "Asignado",
+                        createdAt: ISODate("2023-09-01"),
+                        category_id: 2,
+                        address: {
+                            city: "Manizales",
+                            street: "Avenida 123"
+                        },
+                        payment_id: 14
+                    }
 ])
 
 
@@ -232,7 +399,7 @@ db.review.insertMany(
           "user_id": 2,
           "rating": 4,
           "comment": "Muy buen trabajo",
-          "createdAt": ISODate("2023-08-18T10:00:00Z")
+          "createdAt": ISODate("2023-08-18")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -240,7 +407,7 @@ db.review.insertMany(
           "user_id": 3,
           "rating": 5,
           "comment": "Excelente servicio, lo recomiendo.",
-          "createdAt": ISODate("2023-08-18T11:30:00Z")
+          "createdAt": ISODate("2023-08-18")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -248,7 +415,7 @@ db.review.insertMany(
           "user_id": 1,
           "rating": 3,
           "comment": "Cumplió con lo esperado.",
-          "createdAt": ISODate("2023-08-18T13:15:00Z")
+          "createdAt": ISODate("2023-08-18")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -256,7 +423,7 @@ db.review.insertMany(
           "user_id": 5,
           "rating": 2,
           "comment": "No fue tan bueno como esperaba.",
-          "createdAt": ISODate("2023-08-18T14:45:00Z")
+          "createdAt": ISODate("2023-08-18")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -264,7 +431,7 @@ db.review.insertMany(
           "user_id": 1,
           "rating": 5,
           "comment": "Increíble trabajo, muy satisfecho.",
-          "createdAt": ISODate("2023-08-18T16:30:00Z")
+          "createdAt": ISODate("2023-08-18")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -272,7 +439,7 @@ db.review.insertMany(
           "user_id": 3,
           "rating": 4,
           "comment": "Buen servicio, lo recomiendo.",
-          "createdAt": ISODate("2023-08-19T09:00:00Z")
+          "createdAt": ISODate("2023-08-19")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -280,7 +447,7 @@ db.review.insertMany(
           "user_id": 4,
           "rating": 3,
           "comment": "Podría haber sido mejor.",
-          "createdAt": ISODate("2023-08-19T10:45:00Z")
+          "createdAt": ISODate("2023-08-19")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -288,7 +455,7 @@ db.review.insertMany(
           "user_id": 5,
           "rating": 1,
           "comment": "Muy decepcionado con el resultado.",
-          "createdAt": ISODate("2023-08-19T12:30:00Z")
+          "createdAt": ISODate("2023-08-19")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -296,7 +463,7 @@ db.review.insertMany(
           "user_id": 2,
           "rating": 5,
           "comment": "Superó mis expectativas, excelente.",
-          "createdAt": ISODate("2023-08-19T14:00:00Z")
+          "createdAt": ISODate("2023-08-19")
         },
         {
           "_id": Number(siguienteId('review')),
@@ -304,14 +471,14 @@ db.review.insertMany(
           "user_id": 4,
           "rating": 3,
           "comment": "Un trabajo decente.",
-          "createdAt": ISODate("2023-08-19T15:30:00Z")
+          "createdAt": ISODate("2023-08-19")
         }
 ])
 
 
 db.createCollection("category", {
     capped: true,
-    size: 1000,
+    size: 1500,
     max: 10,
     validator: {
         $jsonSchema: {
@@ -340,7 +507,6 @@ db.createCollection("category", {
         }
     }
 });
-
 
 db.category.insertMany([
     {
@@ -449,3 +615,474 @@ db.rols.insertOne({
     rol_access: ["task", "review", "payment"]
   });
   
+
+/*
+  //consultas task
+        // Consultas GET     
+// Obtener todos las tareas V1 1.1.0
+use("db_campus_rappi");
+db.getCollection("task").aggregate([{$project: { "_id":0}}])
+
+       
+//obtener todas las tareas completadas V1 1.2.0
+use("db_campus_rappi");
+db.getCollection("task").aggregate([
+    {$match: {"status": "Completado"}},
+    {$project: { "_id":0}}])
+
+//obtener todas las tareas ordenadas de por fecha y con su salida formateada V1 1.3.0
+use("db_campus_rappi");
+    db.getCollection("task").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "payment",
+            localField: "payment_id",
+            foreignField: "task_id",
+            as: "task_payments"
+            }
+        },
+        {
+            $unwind: "$task_payments"
+        }
+        ,
+        {
+            $lookup: {
+            from: "shopkeeper",
+            localField: "shopkeeper_id",
+            foreignField: "_id",
+            as: "task_shopkeepers"
+            }
+        },
+        {
+            $unwind: "$task_shopkeepers"
+        },
+        {
+            $lookup: {
+            from: "category",
+            localField: "category_id",
+            foreignField: "_id",
+            as: "category_task"
+            }
+        },
+        {
+            $unwind: "$category_task"
+        },
+        {
+            $project: {
+            _id: 0,
+            Titulo: "$title",
+            Usuario: "$task_user.username",
+            Rappi_Tendero: "$task_shopkeepers.name",
+            Direccion_tendero: "$task_shopkeepers.address",
+            Descripcion: "$description",
+            Estado_pedido: "$status",
+            Direccion_pedido: {
+                Ciudad: "$address.city",
+                Calles: "$address.street"
+            },
+            Categoria_favor: "$category_task.name",
+            Precio: "$task_payments.amount",
+            Metodo_pago : "$task_payments.paymentMethod",
+            Estado_pago : "$task_payments.status",
+            Fecha_favor : "$createdAt"
+        }}]);
+
+        // Consultas GET por parametros
+//listar tareas por id V1 1.1.0
+use("db_campus_rappi");
+db.getCollection("task").findOne({"_id": 2})
+
+//Listar tareas segun su estado con salida formateada V1.2.0
+use("db_campus_rappi");
+const state = "Solicitado"
+db.getCollection("task").aggregate([
+    {$match: {"status": state}},
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "payment_id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $unwind: "$task_payments"
+    }
+    ,
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "shopkeeper_id",
+        foreignField: "_id",
+        as: "task_shopkeepers"
+        }
+    },
+    {
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $project: {
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}
+   ])
+
+//listar tareas realizadas un dia en especifico y con su salida formateada V1 1.3.0
+use("db_campus_rappi");
+const date = "2023-08-20"
+db.getCollection("task").aggregate([
+    {$match: {"createdAt": new Date(date)}},
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "payment_id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $unwind: "$task_payments"
+    }
+    ,
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "shopkeeper_id",
+        foreignField: "_id",
+        as: "task_shopkeepers"
+        }
+    },
+    {
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $project: {
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}
+   ])
+
+//----------------------------------------------------------------
+
+  //consultas review
+        // Consultas GET    
+//obtener todos los reviews v1.1.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([{$project: { "_id":0}}])
+       
+//obtener todos los reviews con salida formateada V1.2.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }
+    }]);
+
+//obtener todos los reviews  con salida formateada y ordenadas de mas rankeadas a menos V1.3.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }}
+    ,{
+        $sort: {
+          Calificacion: -1
+        }
+    }]);
+
+        // Consultas GET por parametros
+//listar por id el review v1.0.0
+use("db_campus_rappi");
+db.getCollection("review").findOne({"_id": 2})
+
+//obtener los review por nombre de usuario con salida formateada V1.2.0
+use("db_campus_rappi");
+const nameUser = "maria.gonzalez"
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }}
+    ,{
+        $match: {
+            Usuario: nameUser
+        }
+    }]);
+
+    //obtener los review por rating con salida formateada V1.3.0
+use("db_campus_rappi");
+const nota = 5
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }},
+        {
+            $match: {
+                Calificacion: {$eq: nota}
+            },
+        },
+    ]);
+
+
+
+//----------------------------------------------------------------
+
+  //consultas category
+          // Consultas GET
+//obtener todos las categorias v1.0.0
+use("db_campus_rappi");
+db.getCollection("category").aggregate([{$project: { "_id":0}}])
+
+//obtener todos las categorias ordenadas alfabeticamente por nombre y con salida formateada v1.2.0
+use("db_campus_rappi");
+db.getCollection("category").aggregate([{$project: { "_id":0, Nombre_categoria: "$name",
+Descripcion_categoria: "$description",
+Icono_FAS: "$icon"}}, {$sort: {
+  "Nombre_categoria": 1
+}}])
+
+//obtener las cantidades de pedidos que se han realizado de todas las categorias disponibles V1.3.0
+use("db_campus_rappi");
+db.task.aggregate([
+    {
+        $lookup: {
+            from: "category",
+            localField: "category_id",
+            foreignField: "_id",
+            as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $group: {
+            _id: "$category_id",
+            Nombre_categoria: { $first: "$category_task.name" },
+            Numero_de_pedidos: { $sum: 1 }
+        }
+    },
+    {$sort:{
+        "Numero_de_pedidos":-1
+    }
+    }
+]);
+
+        // Consultas GET por parametros
+//listar por id las categorias v1.0.0
+use("db_campus_rappi");
+db.getCollection("category").findOne({"_id":2})
+
+//listar por id las categorias pero con la salida formateada v1.3.0
+use("db_campus_rappi");
+db.getCollection("category").aggregate([
+    {
+        $match: { "_id": id }
+    },
+    {
+        $project: {
+            _id: 0,
+          Nombre_categoria: "$name",
+          Descripcion_categoria: "$description",
+          Icono_FAS: "$icon"
+        }
+    }
+])
+
+//----------------------------------------------------------------
+
+*/
