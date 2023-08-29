@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "dev": "nodemon --quiet ./src/app.js",
     "tsc": "tsc -w"
@@ -24,15 +24,10 @@
     "passport-http-bearer": "1.0.1"
   },
   "devDependencies": {
+    "express-routes-versioning": "1.0.1",
     "jose": "4.14.4",
     "nodemon": "3.0.1",
     "reflect-metadata": "0.1.13",
     "typescript": "5.1.6"
   }
 }
-
-
-
-
-
-
