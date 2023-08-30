@@ -40,6 +40,11 @@ appCategory.get('/:id',  version({
 /**
  * ! POST
  * ? Crear una categoria V1 1.1.0
+ * {
+  "Nombre": "Servicio de cerrajeria",
+  "Descripcion": "Este servicio consta de arreglar chapas, replicas de llaves, etc...",
+  "Icono": "fas fa-lock"
+}
  * * http://127.10.10.10:5050/category
  */
 appCategory.post('/',  version({

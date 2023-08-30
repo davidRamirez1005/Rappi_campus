@@ -70,7 +70,7 @@ export const NewCategory = async(req, res) =>{
         console.log(result);
         res.status(201).send({ status: 201, message: 'documento creado con exito' });
     } catch (error) {
-        console.log(error);
+        console.log(error.errInfo.details.schemaRulesNotSatisfied[0]);
         res.status(406).send('no se ha podido crear el documento');
     }
 }

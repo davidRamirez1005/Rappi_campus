@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import routesVersioning  from 'express-routes-versioning';
 
 import {limitget} from '../config/configLimit.js'
-import {getAlltaskV1, getTaskByIdV1, NewTask} from '../controllers/v1/taskRouterV1.js'
+import {getAlltaskV1, getTaskByIdV1, NewTask, updateTask} from '../controllers/v1/taskRouterV1.js'
 import {getAlltaskV2, getTaskByIdV2} from '../controllers/v2/taskRouterV2.js'
 import {getAlltaskV3, getTaskByIdV3} from '../controllers/v3/taskRouterV3.js'
 
@@ -47,5 +47,19 @@ appTask.get('/:id',  version({
 appTask.post('/',  version({
     "~1.1.0": NewTask
 }))
+
+/**
+ * ! UPDATE
+ * ? Ingresar una nueva tarea V1 1.1.0
+ * {
+  "Id_Tarea": 5,
+  "Estado": "Completado"
+}
+ * * http://127.10.10.10:5050/task
+ */
+appTask.put('/',  version({
+    "~1.1.0": updateTask
+}))
+
 
 export default appTask;
