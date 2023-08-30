@@ -10,6 +10,7 @@ import appPayment from './routers/paymentRouter.js';
 
 import { generateToken } from './middlewares/token.js';
 import passport from './middlewares/passport.js';
+import { validatePermissions } from './middlewares/permissions.js';
 
 dotenv.config()
 
@@ -19,12 +20,12 @@ appExpress.use(express.json());
 
 appExpress.post('/login', generateToken)
 
-appExpress.use('/task', passport.authenticate('bearer', { session: false }), appTask);
-appExpress.use('/review', passport.authenticate('bearer', { session: false }), appReview);
-appExpress.use('/category', passport.authenticate('bearer', { session: false }), appCategory);
-appExpress.use('/shopkeeper', passport.authenticate('bearer', { session: false }), appShopkeeper);
-appExpress.use('/user', passport.authenticate('bearer', { session: false }), appUser);
-appExpress.use('/payment', passport.authenticate('bearer', { session: false }), appPayment);
+appExpress.use('/task', passport.authenticate('bearer', { session: false }),validatePermissions, appTask);
+appExpress.use('/review', passport.authenticate('bearer', { session: false }),validatePermissions, appReview);
+appExpress.use('/category', passport.authenticate('bearer', { session: false }),validatePermissions, appCategory);
+appExpress.use('/shopkeeper', passport.authenticate('bearer', { session: false }),validatePermissions, appShopkeeper);
+appExpress.use('/user', passport.authenticate('bearer', { session: false }),validatePermissions, appUser);
+appExpress.use('/payment', passport.authenticate('bearer', { session: false }),validatePermissions, appPayment);
 
 
 
