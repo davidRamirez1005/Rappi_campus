@@ -17,7 +17,7 @@ appShopkeeper.use(limitget());
  * ? obtener todos los tenderos por medio de la cedula V2 2.2.0
  * * http://127.0.0.3:5012/shopkeeper/listar/:78520
  */
-appShopkeeper.get('/listar/:id',  version({
+appShopkeeper.get('/listar/:cedula',  version({
     "~1.1.0": getTenderos,
     "^1.1.1": getTenderosTrue,
     "~2.1.0": getTenderosName,
