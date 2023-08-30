@@ -1,0 +1,525 @@
+use("db_campus_rappi");
+db.createCollection("counters");
+db.counters.insertMany([
+    {_id : "userId", sequence_value : 0},
+    {_id : "shopkeeperId", sequence_value : 0},
+    {_id : "paymentId", sequence_value : 0},
+    {_id : "taskId", sequence_value : 0},
+    {_id : "reviewId", sequence_value : 0},
+    {_id : "categoryId", sequence_value : 0}
+]);
+
+function siguienteId(coleccion) {
+    const sequenceDocument = db.counters.findOneAndUpdate(
+        { _id: `${coleccion}Id` },
+        { $inc: { sequence_value: 1 } },
+        { returnDocument: "after" }
+    );
+    return sequenceDocument.sequence_value;
+};
+/**
+ * ! User
+ */
+use("db_campus_rappi");
+db.createCollection("user", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'username', 'email', 'password','phone','address', 'registrationDate'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                username: {
+                    bsonType: 'string',
+                    minLength: 3,
+                    description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio y debe ser válido',
+                    pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                }
+                ,
+                password: {
+                    bsonType: 'string',
+                    minLength: 5,
+                    description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                },
+                phone: {
+                    "bsonType": "string",
+                    "description": "El teléfono es obligatorio y debe cumplir con ciertas restricciones",
+                    "pattern": "[+\\-0-9\\s]+$"
+                },
+                address: {
+                    "bsonType": "object",
+                    "required": ["city", "street"],
+                    "properties": {
+                        "city": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la ciudad."
+                        },
+                        "street": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la calle."
+                        }
+                    }},
+                    registrationDate: {
+                    bsonType: 'date',
+                    description: 'la fecha registrada es obligatoria'
+                }
+            }
+        }
+    }
+});
+db.user.insertMany([
+    {
+        _id: Number(siguienteId("user")),
+        username: "jose david ramirez",
+        email: "josedavid@example.com",
+        password: "secreto",
+        phone: "+123456789",
+        address: {
+        city: "bucaramanga",
+        street: "Calle Principal"
+        },
+        registrationDate: ISODate("2023-08-19")
+    },
+        {
+        _id: Number(siguienteId("user")),
+        username: "juan diego",
+        email: "juandiego@example.com",
+        password: "juan123",
+        phone: "+123456789",
+        address: {
+        city: "Ciudad Ejemplo",
+        street: "Calle Principal"
+        },
+        registrationDate: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "maria.gonzalez",
+        email: "maria@example.com",
+        password: "contraseña123",
+        phone: "+987654321",
+        address: {
+            city: "Medellín",
+            street: "Avenida Principal"
+        },
+        registrationDate: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "alex.smith",
+        email: "alex@example.com",
+        password: "mypassword",
+        phone: "+555123456",
+        address: {
+            city: "New York",
+            street: "123 Main Street"
+        },
+        registrationDate: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "laura.johnson",
+        email: "laura@example.com",
+        password: "securepass",
+        phone: "+789456123",
+        address: {
+            city: "Los Angeles",
+            street: "Sunset Boulevard"
+        },
+        registrationDate: ISODate("2023-08-21")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "juan.perez",
+        email: "juan@example.com",
+        password: "miclave",
+        phone: "+123123123",
+        address: {
+            city: "Mexico City",
+            street: "Calle Juarez"
+        },
+        registrationDate: ISODate("2023-08-21")
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "emily.williams",
+        email: "emily@example.com",
+        password: "emilyspass",
+        phone: "+444555666",
+        address: {
+            city: "London",
+            street: "Baker Street"
+        },
+        registrationDate: ISODate("2023-08-22")
+    } 
+]);
+/**
+ * ! shopkeeper
+ */
+use("db_campus_rappi");
+db.createCollection("shopkeeper", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'name', 'email', 'password','phone','address', 'availability'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                name: {
+                    bsonType: 'string',
+                    minLength: 3,
+                    description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio y debe ser válido',
+                    pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                }
+                ,
+                password: {
+                    bsonType: 'string',
+                    minLength: 5,
+                    description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                },
+                phone: {
+                    "bsonType": "string",
+                    "description": "El teléfono es obligatorio y debe cumplir con ciertas restricciones",
+                    "pattern": "[+\\-0-9\\s]+$"
+                },
+                address: {
+                    "bsonType": "object",
+                    "required": ["city", "street"],
+                    "properties": {
+                        "city": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la ciudad."
+                        },
+                        "street": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la calle."
+                        }
+                    }},
+                availability: {
+                bsonType: 'bool',
+                description: 'la disponobilidad del tendero es obligatoria'
+                }
+            }
+        }
+    }
+});    
+db.shopkeeper.insertMany([
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "luis caicedo",
+        email: "luis@example.com",
+        password: "domi123",
+        phone: "+123456789",
+        address: {
+        city: "bucaramanga",
+        street: "Calle Principal"
+        },
+        availability: true
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name : "Ana Martinez",
+        email: "ana@example.com",
+        password: "ana456",
+        phone: "+987654321",
+        address: {
+            "city": "Madrid",
+            "street": "Calle Principal"
+        },
+        availability: false
+    }
+    ,
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Michael Johnson",
+        email: "michael@example.com",
+        password: "mikepass",
+        phone: "+987654321",
+        address: {
+            city: "Medellín",
+            street: "Avenida Principal"
+        },
+        availability: true
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Sophie Martin",
+        email: "sophie@example.com",
+        password: "sophie789",
+        phone: "+555123456",
+        address: {
+            city: "New York",
+            street: "123 Main Street"
+        },
+        availability: false
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "laura.johnson",
+        email: "laura@example.com",
+        password: "securepass",
+        phone: "+789456123",
+        address: {
+            city: "Los Angeles",
+            street: "Sunset Boulevard"
+        },
+        availability: true
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Carlos Gonzalez",
+        email: "carlos@example.com",
+        password: "car123",
+        phone: "+123123123",
+        address: {
+            city: "piedecuesta",
+            street: "Calle Juarez"
+        },
+        availability: true
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "francisco mora",
+        email: "fran@example.com",
+        password: "micontra123",
+        phone: "+444555666",
+        address: {
+            city: "London",
+            street: "Baker Street"
+        },
+        availability: false
+    } 
+]);
+/**
+ * ! payment
+ */
+use("db_campus_rappi");
+db.createCollection("payment", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'task_id', 'amount', 'paymentDate','paymentMethod','status'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                task_id: {
+                    bsonType: 'int',
+                    description: "el id de la tarea es obligatorio"
+                },
+                amount: {
+                    bsonType: 'int',
+                    description: 'El precio es obligatorio y debe ser numerico'
+                },
+                paymentDate: {
+                    bsonType: 'date',
+                    description: "la fecha es obligatorio"
+                },
+                paymentMethod : {
+                    "bsonType": "string",
+                    "items": {
+                        "enum": ["nequi", "bancolombia", "pse", "daviplata", "efectivo"]
+                    }
+                },
+                status: {
+                    "bsonType": "string",
+                    "description": "El estado es obligatorio",
+                }
+            }
+        }
+    }
+});    
+db.payment.insertMany([
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 1,
+        amount: 50000,
+        paymentDate: ISODate("2023-08-20"),
+        paymentMethod: "nequi",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 2,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "bancolombia",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 3,
+        amount: 20000,
+        paymentDate: ISODate("2023-08-26"),
+        paymentMethod: "bancolombia",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 4,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "efectivo",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id:5,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod:"efectivo",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 6,
+        amount: 30000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "daviplata",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 7,
+        amount: 40000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "bancolombia",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 8,
+        amount: 25000,
+        paymentDate: ISODate("2023-08-30"),
+        paymentMethod: "nequi",
+        status: "pendiente"
+    },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 9,
+            amount: 25000,
+            paymentDate: ISODate("2023-08-30"),
+            paymentMethod: "nequi",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 10,
+            amount: 5000,
+            paymentDate: ISODate("2023-08-31"),
+            paymentMethod: "bancolombia",
+            status: "aprobado"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 11,
+            amount: 30000,
+            paymentDate: ISODate("2023-09-01"),
+            paymentMethod: "daviplata",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 12,
+            amount: 15000,
+            paymentDate: ISODate("2023-09-02"),
+            paymentMethod: "efectivo",
+            status: "aprobado"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 13,
+            amount: 20000,
+            paymentDate: ISODate("2023-09-03"),
+            paymentMethod: "nequi",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 14,
+            amount: 10000,
+            paymentDate: ISODate("2023-09-04"),
+            paymentMethod: "bancolombia",
+            status: "pendiente"
+        }
+]);
+
+use("db_campus_rappi");
+const nombreV3 = "jose david ramirez"
+const ciudad = "bucaramanga"
+db.user.aggregate([
+    {
+        $lookup: {
+        from: "task",
+        localField: "_id",
+        foreignField: "user_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "user_tasks._id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "_id",
+        foreignField: "_id",
+        as: "tendero_relacionado"
+        }
+    },
+    {
+        $match: {
+        username : nombreV3
+        }
+    },
+    {
+        $project: {
+        _id: 1,
+        nombre_usuario: "$username",
+        email_usuario : "$email",
+        telefono_usuario : "$phone", 
+        direccion_usuario: "$address",
+        titulo : "$user_tasks.title",
+        descripcion : "$user_tasks.description",
+        estado_favor : "$user_tasks.status",
+        precio: "$task_payments.amount",
+        metodo_pago : "$task_payments.paymentMethod",
+        estado_pago : "$task_payments.status",
+        fecha_favor : "$user_tasks.createdAt",
+        nombre_tendero : "$tendero_relacionado.name"
+        }
+    }
+]);

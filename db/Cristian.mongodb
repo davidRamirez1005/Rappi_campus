@@ -1,0 +1,1215 @@
+//db.createCollection("counters");
+/*db.counters.insertMany([
+    {_id : "taskId", sequence_value : 0},
+    {_id : "reviewId", sequence_value : 0},
+    {_id : "categoryId", sequence_value : 0}
+]);*/
+
+use("db_campus_rappi");
+function siguienteId(coleccion) {
+    const sequenceDocument = db.counters.findOneAndUpdate(
+        { _id: `${coleccion}Id` },
+        { $inc: { sequence_value: 1 } },
+        { returnDocument: "after" }
+    );
+    return sequenceDocument.sequence_value;
+};
+
+/**
+ * ! task
+ */
+
+
+db.createCollection("task", {
+    capped: true,
+    size: 5000,
+    max: 70,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'title', 'description', 'user_id','shopkeeper_id','status', 'createdAt', "category_id","payment_id"],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "id_tarea del usuario"
+                },
+                title: {
+                    bsonType: 'string',
+                    description: "el titulo_tarea debe contener minimo 20 caracteres, y es obligatorio"
+                },
+                description: {
+                    bsonType: 'string',
+                    description: 'La descripcion es obligatoria y debe ser un string',
+                },
+                user_id: {
+                    bsonType: 'int',
+                    description: "El id_usuario debe ser un numero entero, y es obligatorio"
+                },
+                shopkeeper_id: {
+                    bsonType: "int",
+                    description: "El id_tendero debe ser un numero entero, y es obligatorio"
+                },
+                status: {
+                    enum: ["Solicitado", "Asignado", "Completado", "Cancelado", "en Proceso"],
+                    description: "Debe ser un estado valido es decir, 'Solicitado', 'Asignado', 'Completado', 'Cancelado', o 'en Proceso'"
+                },
+                createdAt: {
+                    bsonType: 'date',
+                    description: 'la fecha_creacion es obligatoria y debe ser un formato valido'
+                },
+                category_id: {
+                    bsonType: "int",
+                    description: "El id_categoria debe ser un numero entero, y es obligatorio"
+                },
+                address: {
+                    bsonType: "object",
+                    required: ["city", "street"],
+                    properties: {
+                        city: {
+                            enum: ["Bogotá","Medellin","Cali","Barranquilla","Cartagena","Cucuta","Bucaramanga","Pereira","Santa Marta","Pasto","Manizales","Neiva","Armenia","Villavicencio","Valledupar","Montería","Sincelejo"],
+                            description: "Ciudad debe ser una ciudad en la que estemos presentes"
+                        },
+                        street: {
+                            bsonType: "string",
+                            pattern: "^[a-zA-Z0-9,|°#\\-() ]+$", 
+                            minLength: 5,
+                            maxLength: 100, 
+                            description: "La dirección debe cumplir con ciertos criterios."
+                        }
+                        }
+                    },
+                payment_id: {
+                    bsonType: "int",
+                    description: "El id_pago debe ser un numero entero, y es obligatorio"
+                    }
+                }
+            }
+        }
+});
+
+use("db_campus_rappi");
+db.task.insertMany([
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 1 - Recoger paquetes",
+        description: "Se debe recoger un paquete para enviarlo por correspondencia",
+        user_id: 15,
+        shopkeeper_id: 15,
+        status: "Completado",
+        address: {
+            city: "Medellin",
+            street: "calle 20 N°23-24 (Versalles)"
+        },
+        category_id: 1,
+        payment_id: 1,
+        createdAt: ISODate("2023-08-19")
+    },{
+        _id: Number(siguienteId("task")),
+        title: "titulo 2 - Sacar perros",
+        description: "Se debe sacar a pásear mis perrros",
+        user_id: 16,
+        shopkeeper_id: 16,
+        status: "Asignado",
+        address: {
+            city: "Bucaramanga",
+            street: "calle 20 N°23-24 (San alonso)"
+        },
+        category_id: 2,
+        payment_id: 2,
+        createdAt: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 3 - Comprar mercado ",
+        description: "Se deben comprar huevos, shampoo y perfume",
+        user_id: 15,
+        shopkeeper_id: 20,
+        status: "Solicitado",
+        address: {
+            city: "Bogotá",
+            street: "carrera 30 #23-24"
+        },
+        category_id: 2,
+        payment_id: 2,
+        createdAt: ISODate("2023-08-21")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 1 - Recoger paquetes",
+        description: "Se debe recoger un paquete para enviarlo por correspondencia",
+        user_id: 18,
+        shopkeeper_id: 21,
+        status: "Completado",
+        address: {
+            city: "Medellin",
+            street: "calle 20 N°23-24 (Versalles)"
+        },
+        category_id: 1,
+        payment_id: 1,
+        createdAt: ISODate("2023-08-19")
+    },{
+        _id: Number(siguienteId("task")),
+        title: "titulo 2 - Sacar perros",
+        description: "Se debe sacar a pásear mis perrros",
+        user_id: 17,
+        shopkeeper_id: 19,
+        status: "Asignado",
+        address: {
+            city: "Bucaramanga",
+            street: "calle 20 N°23-24 (San alonso)"
+        },
+        category_id: 2,
+        payment_id: 2,
+        createdAt: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 3 - Comprar mercado ",
+        description: "Se deben comprar huevos, shampoo y fresas",
+        user_id: 21,
+        shopkeeper_id: 21,
+        status: "Solicitado",
+        address: {
+            city: "Bogotá",
+            street: "carrera 30 #23-24"
+        },
+        category_id: 2,
+        payment_id: 3,
+        createdAt: ISODate("2023-08-21")
+    },
+        {
+        _id: Number(siguienteId("task")),
+            title: "Reparación de jardineria",
+            description: "Se necesita reparar el jardin que esta vuelto nada.",
+            user_id: 4,
+            shopkeeper_id: 5,
+            status: "Solicitado",
+            createdAt: ISODate("2023-08-22"),
+            category_id: 2,
+            address: {
+                city: "Bogotá",
+                street: "Calle 123"
+            },
+            payment_id: 4 
+        },
+        {
+        _id: Number(siguienteId("task")),
+            title: "Limpieza a fondo",
+            description: "Necesito una limpieza profunda para mi apartamento.",
+            user_id: 4,
+            shopkeeper_id: 6,
+            status: "Asignado",
+            createdAt: ISODate("2023-08-23"),
+            category_id: 3,
+            address: {
+                city: "Medellin",
+                street: "Carrera 456"
+            },
+            payment_id: 5
+        },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Podar arbustos en el jardín",
+                description: "Necesito que alguien poda los arbustos en mi jardín trasero.",
+                user_id: 3,
+                shopkeeper_id: 6,
+                status: "Completado",
+                createdAt: ISODate("2023-08-24"),
+                category_id: 2,
+                address: {
+                    city: "Cali",
+                    street: "Avenida 789"
+                },
+                payment_id: 6
+            },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Cuidado de perro durante el fin de semana",
+                description: "Requiero alguien que cuide de mi perro mientras estoy fuera durante el fin de semana.",
+                user_id: 4,
+                shopkeeper_id: 2,
+                status: "en Proceso",
+                createdAt: ISODate("2023-08-25"),
+                category_id: 3,
+                address: {
+                    city: "Barranquilla",
+                    street: "Calle 234"
+                },
+                payment_id: 7
+            },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Entrega de comida a domicilio",
+                description: "Necesito que me traigan una pizza a mi casa.",
+                user_id: 5,
+                shopkeeper_id: 7,
+                status: "Solicitado",
+                createdAt: ISODate("2023-08-26"),
+                category_id: 4,
+                address: {
+                    city: "Cartagena",
+                    street: "Carrera 567"
+                },
+                payment_id: 8
+            },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Clases de piano para principiantes",
+                    description: "Busco un profesor de piano para dar clases a un principiante.",
+                    user_id: 6,
+                    shopkeeper_id: 2,
+                    status: "Asignado",
+                    createdAt: ISODate("2023-08-27"),
+                    category_id: 5,
+                    address: {
+                        city: "Cucuta",
+                        street: "Calle 678"
+                    },
+                    payment_id: 9
+                },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Transporte al aeropuerto",
+                    description: "Necesito un conductor que me lleve al aeropuerto mañana temprano.",
+                    user_id: 7,
+                    shopkeeper_id: 4,
+                    status: "en Proceso",
+                    createdAt: ISODate("2023-08-28"),
+                    category_id: 6,
+                    address: {
+                        city: "Bucaramanga",
+                        street: "Avenida 789"
+                    },
+                    payment_id: 10
+                },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Planificación de fiesta de cumpleaños",
+                    description: "Busco a alguien que me ayude a organizar una fiesta de cumpleaños para mi hijo.",
+                    user_id: 8,
+                    shopkeeper_id: 8,
+                    status: "Solicitado",
+                    createdAt: ISODate("2023-08-29"),
+                    category_id: 8,
+                    address: {
+                        city: "Pereira",
+                        street: "Carrera 123"
+                    },
+                    payment_id: 11
+                },
+            
+      
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Reparación de filtro de aire acondicionado",
+                        description: "Necesito que alguien repare el filtro de mi unidad de aire acondicionado.",
+                        user_id: 4,
+                        shopkeeper_id: 1,
+                        status: "Completado",
+                        createdAt: ISODate("2023-08-30"),
+                        category_id: 1,
+                        address: {
+                            city: "Santa Marta",
+                            street: "Calle 789"
+                        },
+                        payment_id: 12
+                    },
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Clases de inglés avanzado",
+                        description: "Estoy interesado en tomar clases de inglés avanzado para mejorar mi fluidez.",
+                        user_id: 4,
+                        shopkeeper_id: 2,
+                        status: "Solicitado",
+                        createdAt: ISODate("2023-08-31"),
+                        category_id: 5,
+                        address: {
+                            city: "Pasto",
+                            street: "Carrera 456"
+                        },
+                        payment_id: 13
+                    },
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Corte de césped",
+                        description: "Necesito que alguien corte el césped en mi jardín delantero.",
+                        user_id: 6,
+                        shopkeeper_id: 3,
+                        status: "Asignado",
+                        createdAt: ISODate("2023-09-01"),
+                        category_id: 2,
+                        address: {
+                            city: "Manizales",
+                            street: "Avenida 123"
+                        },
+                        payment_id: 14
+                    }
+])
+
+
+
+db.createCollection("review", {
+    capped: true,
+    size: 4000,
+    max: 70,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'task_id', 'user_id','rating', 'createdAt'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "El id_review debe ser un numero entero, y es obligatorio"
+                },
+                task_id: {
+                    bsonType: 'int',
+                    description: "El id_tarea debe ser un numero entero, y es obligatorio"
+                },
+                user_id: {
+                    bsonType: 'int',
+                    description: "El id_usuario debe ser un numero entero, y es obligatorio"
+                },
+                rating: {
+                    bsonType: "int",
+                    pattern: "^[1-5]$", 
+                    description: "La calificacion debe ser un numero entero entre 1 y 5, y es obligatorio"
+                },
+                comment: {
+                    bsonType: ['string', 'null'],
+                    maxLength:500,
+                    description: "El comentario debe ser un string y no puede superar los 500 caracteres"
+                },
+                createdAt: {
+                    bsonType: 'date',
+                    description: 'la fecha_creacion es obligatoria y debe ser un formato valido'
+                }
+            }
+            }
+        }
+});
+
+
+db.review.insertMany(
+    [
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 1,
+          "user_id": 2,
+          "rating": 4,
+          "comment": "Muy buen trabajo",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 2,
+          "user_id": 3,
+          "rating": 5,
+          "comment": "Excelente servicio, lo recomiendo.",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 3,
+          "user_id": 1,
+          "rating": 3,
+          "comment": "Cumplió con lo esperado.",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 4,
+          "user_id": 5,
+          "rating": 2,
+          "comment": "No fue tan bueno como esperaba.",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 5,
+          "user_id": 1,
+          "rating": 5,
+          "comment": "Increíble trabajo, muy satisfecho.",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 1,
+          "user_id": 3,
+          "rating": 4,
+          "comment": "Buen servicio, lo recomiendo.",
+          "createdAt": ISODate("2023-08-19")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 2,
+          "user_id": 4,
+          "rating": 3,
+          "comment": "Podría haber sido mejor.",
+          "createdAt": ISODate("2023-08-19")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 3,
+          "user_id": 5,
+          "rating": 1,
+          "comment": "Muy decepcionado con el resultado.",
+          "createdAt": ISODate("2023-08-19")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 4,
+          "user_id": 2,
+          "rating": 5,
+          "comment": "Superó mis expectativas, excelente.",
+          "createdAt": ISODate("2023-08-19")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 5,
+          "user_id": 4,
+          "rating": 3,
+          "comment": "Un trabajo decente.",
+          "createdAt": ISODate("2023-08-19")
+        }
+])
+
+
+db.createCollection("category", {
+    capped: true,
+    size: 1500,
+    max: 10,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'name', 'description'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "El id_categoria debe ser un numero entero, y es obligatorio"
+                },
+                name: {
+                    bsonType: 'string',
+                    description: "el nombre_categoria debe contener minimo 20 caracteres, y es obligatorio"
+                },
+                description: {
+                    bsonType: 'string',
+                    description: 'La descripcion_categoria es obligatoria y debe ser un string',
+                },
+                icon: {
+                    bsonType: "string",
+                    description: "El icono_categoria debe ser un string valido (ej. fas fa-birthday-cake)"
+                }
+            }
+
+        }
+    }
+});
+
+db.category.insertMany([
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Reparaciones",
+      "description": "Servicios de reparación y mantenimiento en el hogar.",
+      "icon": "fas fa-tools"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Limpieza",
+      "description": "Servicios de limpieza y organización en el hogar o la oficina.",
+      "icon": "fas fa-broom"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Jardinería",
+      "description": "Cuidado y mantenimiento de jardines y áreas verdes.",
+      "icon": "fas fa-leaf"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Cuidado de Mascotas",
+      "description": "Cuidado de perros, gatos y otras mascotas.",
+      "icon": "fas fa-paw"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Reparto de Comida",
+      "description": "Entrega de alimentos a domicilio.",
+      "icon": "fas fa-pizza-slice"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Clases Particulares",
+      "description": "Clases de idiomas, música, deportes y más.",
+      "icon": "fas fa-graduation-cap"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Transporte",
+      "description": "Servicios de transporte de personas o paquetes.",
+      "icon": "fas fa-car"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Eventos",
+      "description": "Organización y planificación de eventos especiales.",
+      "icon": "fas fa-birthday-cake"
+    }
+  ]
+  )
+
+
+
+use("db_campus_rappi");
+db.createCollection("rols", {
+    capped: true,
+    size: 3000,
+    max: 10,
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            additionalProperties: false,
+            required : ['_id', 'name_rol','rol_access'],
+            properties:{
+                _id:{
+                    bsonType: 'int',
+                    description : "El ID_ROL es un parametro obligatorio y debe ser un entero"
+                },
+                name_rol:{  
+                    bsonType: 'string',
+                    description : "El NOMBRE_ROL es un parametro obligatorio y debe ser un string"
+                },
+                description_rol:{  
+                    bsonType: 'string',
+                    description : "El DESCRIPCION_ROL es un parametro obligatorio y debe ser un string"
+                },
+                rol_access:{  
+                    bsonType: 'object',
+                    description: "Ingrese los endpoints a los que tiene acceso, este debe ser un objeto de parametros string",
+                    properties:{
+                        "endpoint":{
+                            bsonType: 'object',
+                            description: "Ingrese los metodos este debe ser un objeto de parametros string",
+                            properties:{
+                                "method":{
+                                    bsonType: "array",
+                                    description: "Ingrese las versiones permitidos por este rol, debe ser un array de string con el numero de la version",
+                                    items: {
+                                        bsonType: "string",
+                                        description: "Ingrese la version autorizada, este debe ser de tipo string",
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+  })
+  
+  
+
+db.rols.insertMany([{
+    _id: 1,
+    name_rol: "admin",
+    description_rol: "Rol de administrador con acceso a todas las colecciones",
+    rol_access:{
+        "user": {
+            "get":["1.2.0","1.3.0","2.0.0","2.1.0","3.0.0","3.1.1","3.2.0","3.3.1"],
+            "post": ["1.1.0"],
+            "delete":["1.1.0"]
+        },
+        "shopkeeper":{
+            "get": ["1.1.0","1.1.1","2.1.0","2.2.0"],
+            "post": ["1.1.0"],
+            "delete":["1.1.0"]
+        },
+        "payment":{
+            "get": ["1.1.0"]
+        },
+        "task": {
+            "get": ["1.1.0","2.1.0", "3.1.0"],
+            "post": ["1.1.0"],
+            "put":["1.1.0"]
+        },
+        "review":{
+            "get": ["1.1.0", "2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "category":{
+            "get": ["2.1.0", "1.1.0","3.1.0"],
+            "post": ["1.1.0"]
+        }
+    }
+    },
+    {
+    _id: 2,
+    name_rol: "user",
+    description_rol: "Rol de usuario con acceso a la colección 'task', 'payment', 'review' y 'category'",
+    rol_access: {
+        "task": {
+            "get": ["2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "payment":{
+            "get": ["1.1.0"]
+        },
+        "review":{
+            "get": ["2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "category":{
+            "get": ["2.1.0", "3.1.0"]
+        }
+    }
+  },{
+    _id: 3,
+    name_rol: "shopkeeper",
+    description_rol: "Rol de comerciante con acceso a la colección 'task' 'payment' y 'review'",
+    rol_access: {
+        "task": {
+            "get": ["2.1.0", "3.1.0"],
+            "put": ["1.1.0"]
+        },
+        "payment":{
+            "get": ["1.1.0"]
+        },
+        "review":{
+            "get": ["2.1.0", "3.1.0"]
+        }
+    }
+  }]);
+  use("db_campus_rappi");
+  db.createCollection("admin", {
+      capped: true,
+      size: 2500,
+      max: 5,
+      validator: {
+          $jsonSchema: {
+              bsonType: 'object',
+              additionalProperties: false,
+              required: ['_id', 'username', 'email', 'password'],
+              properties: {
+                  _id: {
+                      bsonType: "int",
+                      description: "ID del admin"
+                  },
+                  username: {
+                      bsonType: 'string',
+                      minLength: 3,
+                      description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                  },
+                  email: {
+                      bsonType: 'string',
+                      description: 'El email es obligatorio y debe ser válido',
+                      pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                  },
+                  password: {
+                      bsonType: 'string',
+                      minLength: 5,
+                      description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                  },
+                }
+            }
+        }
+    })
+
+    db.admin.insertMany([
+        {
+            _id: 1,
+            username: "jose david ramirez",
+            email: "JDavidRamirez@example.com",
+            password: "admin1"
+        },
+            {
+            _id: 2,
+            username: "C-jimenez",
+            email: "CJimenez21@example.com",
+            password: "admin2"
+        },
+        {
+            _id: 3,
+            username: "Campuslands",
+            email: "campusMigue@example.com",
+            password: "admin3"
+        }
+    ]);
+
+
+
+
+/*
+  //consultas task
+        // Consultas GET     
+// Obtener todos las tareas V1 1.1.0
+use("db_campus_rappi");
+db.getCollection("task").aggregate([{$project: { "_id":0}}])
+
+       
+//obtener todas las tareas completadas V1 1.2.0
+use("db_campus_rappi");
+db.getCollection("task").aggregate([
+    {$match: {"status": "Completado"}},
+    {$project: { "_id":0}}])
+
+//obtener todas las tareas ordenadas de por fecha y con su salida formateada V1 1.3.0
+use("db_campus_rappi");
+    db.getCollection("task").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "payment",
+            localField: "payment_id",
+            foreignField: "task_id",
+            as: "task_payments"
+            }
+        },
+        {
+            $unwind: "$task_payments"
+        }
+        ,
+        {
+            $lookup: {
+            from: "shopkeeper",
+            localField: "shopkeeper_id",
+            foreignField: "_id",
+            as: "task_shopkeepers"
+            }
+        },
+        {
+            $unwind: "$task_shopkeepers"
+        },
+        {
+            $lookup: {
+            from: "category",
+            localField: "category_id",
+            foreignField: "_id",
+            as: "category_task"
+            }
+        },
+        {
+            $unwind: "$category_task"
+        },
+        {
+            $project: {
+            _id: 0,
+            Titulo: "$title",
+            Usuario: "$task_user.username",
+            Rappi_Tendero: "$task_shopkeepers.name",
+            Direccion_tendero: "$task_shopkeepers.address",
+            Descripcion: "$description",
+            Estado_pedido: "$status",
+            Direccion_pedido: {
+                Ciudad: "$address.city",
+                Calles: "$address.street"
+            },
+            Categoria_favor: "$category_task.name",
+            Precio: "$task_payments.amount",
+            Metodo_pago : "$task_payments.paymentMethod",
+            Estado_pago : "$task_payments.status",
+            Fecha_favor : "$createdAt"
+        }}]);
+
+        // Consultas GET por parametros
+//listar tareas por id V1 1.1.0
+use("db_campus_rappi");
+db.getCollection("task").findOne({"_id": 2})
+
+//Listar tareas segun su estado con salida formateada V1.2.0
+use("db_campus_rappi");
+const state = "Solicitado"
+db.getCollection("task").aggregate([
+    {$match: {"status": state}},
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "payment_id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $unwind: "$task_payments"
+    }
+    ,
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "shopkeeper_id",
+        foreignField: "_id",
+        as: "task_shopkeepers"
+        }
+    },
+    {
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $project: {
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}
+   ])
+
+//listar tareas realizadas un dia en especifico y con su salida formateada V1 1.3.0
+use("db_campus_rappi");
+const date = "2023-08-20"
+db.getCollection("task").aggregate([
+    {$match: {"createdAt": new Date(date)}},
+    {
+        $lookup: {
+        from: "user",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user_tasks"
+        }
+    },
+    {
+        $unwind: "$user_tasks"
+    },
+    {
+        $lookup: {
+        from: "payment",
+        localField: "payment_id",
+        foreignField: "task_id",
+        as: "task_payments"
+        }
+    },
+    {
+        $unwind: "$task_payments"
+    }
+    ,
+    {
+        $lookup: {
+        from: "shopkeeper",
+        localField: "shopkeeper_id",
+        foreignField: "_id",
+        as: "task_shopkeepers"
+        }
+    },
+    {
+        $unwind: "$task_shopkeepers"
+    },
+    {
+        $lookup: {
+        from: "category",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $project: {
+        _id: 0,
+        Titulo: "$title",
+        Usuario: "$task_user.username",
+        Rappi_Tendero: "$task_shopkeepers.name",
+        Direccion_tendero: "$task_shopkeepers.address",
+        Descripcion: "$description",
+        Estado_pedido: "$status",
+        Direccion_pedido: {
+            Ciudad: "$address.city",
+            Calles: "$address.street"
+        },
+        Categoria_favor: "$category_task.name",
+        Precio: "$task_payments.amount",
+        Metodo_pago : "$task_payments.paymentMethod",
+        Estado_pago : "$task_payments.status",
+        Fecha_favor : "$createdAt"
+    }}
+   ])
+
+//----------------------------------------------------------------
+
+  //consultas review
+        // Consultas GET    
+//obtener todos los reviews v1.1.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([{$project: { "_id":0}}])
+       
+//obtener todos los reviews con salida formateada V1.2.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }
+    }]);
+
+//obtener todos los reviews  con salida formateada y ordenadas de mas rankeadas a menos V1.3.0
+use("db_campus_rappi");
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }}
+    ,{
+        $sort: {
+          Calificacion: -1
+        }
+    }]);
+
+        // Consultas GET por parametros
+//listar por id el review v1.0.0
+use("db_campus_rappi");
+db.getCollection("review").findOne({"_id": 2})
+
+//obtener los review por nombre de usuario con salida formateada V1.2.0
+use("db_campus_rappi");
+const nameUser = "maria.gonzalez"
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }}
+    ,{
+        $match: {
+            Usuario: nameUser
+        }
+    }]);
+
+    //obtener los review por rating con salida formateada V1.3.0
+use("db_campus_rappi");
+const nota = 5
+db.getCollection("review").aggregate([
+        {
+            $lookup: {
+            from: "user",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user_tasks"
+            }
+        },
+        {
+            $unwind: "$user_tasks"
+        },
+        {
+            $lookup: {
+            from: "task",
+            localField: "task_id",
+            foreignField: "_id",
+            as: "review_tasks"
+            }
+        },
+        {
+            $unwind: "$review_tasks"
+        },
+        {
+            $project: {
+            _id: 0,
+            Calificacion: "$rating",
+           Comentario: "$comment",
+            Usuario: "$user_tasks.username",
+           
+            
+        }},
+        {
+            $match: {
+                Calificacion: {$eq: nota}
+            },
+        },
+    ]);
+
+
+
+//----------------------------------------------------------------
+
+  //consultas category
+          // Consultas GET
+//obtener todos las categorias v1.0.0
+use("db_campus_rappi");
+db.getCollection("category").aggregate([{$project: { "_id":0}}])
+
+//obtener todos las categorias ordenadas alfabeticamente por nombre y con salida formateada v1.2.0
+use("db_campus_rappi");
+db.getCollection("category").aggregate([{$project: { "_id":0, Nombre_categoria: "$name",
+Descripcion_categoria: "$description",
+Icono_FAS: "$icon"}}, {$sort: {
+  "Nombre_categoria": 1
+}}])
+
+//obtener las cantidades de pedidos que se han realizado de todas las categorias disponibles V1.3.0
+use("db_campus_rappi");
+db.task.aggregate([
+    {
+        $lookup: {
+            from: "category",
+            localField: "category_id",
+            foreignField: "_id",
+            as: "category_task"
+        }
+    },
+    {
+        $unwind: "$category_task"
+    },
+    {
+        $group: {
+            _id: "$category_id",
+            Nombre_categoria: { $first: "$category_task.name" },
+            Numero_de_pedidos: { $sum: 1 }
+        }
+    },
+    {$sort:{
+        "Numero_de_pedidos":-1
+    }
+    }
+]);
+
+        // Consultas GET por parametros
+//listar por id las categorias v1.0.0
+use("db_campus_rappi");
+db.getCollection("category").findOne({"_id":2})
+
+//listar por id las categorias pero con la salida formateada v1.3.0
+use("db_campus_rappi");
+db.getCollection("category").aggregate([
+    {
+        $match: { "_id": id }
+    },
+    {
+        $project: {
+            _id: 0,
+          Nombre_categoria: "$name",
+          Descripcion_categoria: "$description",
+          Icono_FAS: "$icon"
+        }
+    }
+])
+
+//----------------------------------------------------------------
+
+*/
