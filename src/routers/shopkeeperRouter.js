@@ -15,25 +15,25 @@ appShopkeeper.use(limitget());
  * ? obtener todos los tenderos con disponibilidad V1 1.1.1
  * ? obtener todos los tenderos por medio del nombre V2 2.1.0
  * ? obtener todos los tenderos por medio de la cedula V2 2.2.0
- * * http://127.0.0.3:5012/shopkeeper/listar
+ * * http://127.0.0.3:5012/shopkeeper/listar/:78520
  */
-appShopkeeper.get('/listar',  version({
-    "1.1.0": getTenderos,
+appShopkeeper.get('/listar/:id',  version({
+    "~1.1.0": getTenderos,
     "^1.1.1": getTenderosTrue,
-    "2.1.0": getTenderosName,
+    "~2.1.0": getTenderosName,
     "^2.2.0": getTenderosCedula,
 }))
 /**
  * ? insertar un nuevo tendero V1 1.1.0
  */
 appShopkeeper.post('/agregar', version({
-    "1.1.0" : insertShopkeeperV1
+    "~1.1.0" : insertShopkeeperV1
 }))
 /**
  * ? eliminar un usuario V1 1.1.0
  */
 appShopkeeper.delete('/eliminar/:_id', version({
-    "1.1.0" : deleteShopkeeper
+    "~1.1.0" : deleteShopkeeper
 }));
 
 export default appShopkeeper;

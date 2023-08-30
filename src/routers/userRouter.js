@@ -19,7 +19,7 @@ appUser.use(limitget());
  * ? obtener todos los usuarios que tienen pago pendiente y residen en una ciudad en especifico V3 3.0.0
  * ? obtener todos los usuarios que tienen pago pendiente y residen en una ciudad en especifico con descripcion del favor V3 3.1.1
  * ? obtener la descripcion del favor completo por un usuario en especifico V3 3.2.0
- * ? obtener la descripcion del favor completo po un usuario en especifico y el tendero que atendió el favor V3 3.3.1
+ * ? obtener la descripcion del favor completo por un usuario en especifico y el tendero que atendió el favor V3 3.3.1
  * * http://127.0.0.3:5012/user/listar
  */
 appUser.get('/listar',  version({
