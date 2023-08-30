@@ -28,19 +28,22 @@ export const getTenderosTrue = async(req, res) =>{
     res.send(result)
 }
 /**
- * * insertar un nuevo usuario
+ * * insertar un nuevo tendero
  */
 /*
 {
     "name": "pepito perez",
+    "identification" : 96586
     "email": "pepito@example.com",
+    "identification" : 202321
     "password": "pepito123",
     "phone": "+4567890345",
     "address": {
     "city": "bucaramanga",
     "street": "Calle Principal"
     },
-    "availability": true
+    "availability": true,
+    "rol" : 3
 }
 */
 export const insertShopkeeperV1 = async(req, res) =>{

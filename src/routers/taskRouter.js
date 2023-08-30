@@ -51,10 +51,10 @@ appTask.post('/',  version({
 /**
  * ! UPDATE
  * ? Ingresar una nueva tarea V1 1.1.0
- * {
-  "Id_Tarea": 5,
-  "Estado": "Completado"
-}
+ *  {
+        "Id_Tarea": 5,
+        "Estado": "Completado"
+    }
  * * http://127.10.10.10:5050/task
  */
 appTask.put('/',  version({

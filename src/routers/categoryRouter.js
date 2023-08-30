@@ -1,7 +1,6 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
 import routesVersioning  from 'express-routes-versioning';
-
 import {limitget} from '../config/configLimit.js'
 import {getAllCategoryV1, getCategoryByIdV1, NewCategory} from '../controllers/v1/categoryRouterV1.js'
 import {getAllcategoryV2, getCategoryByIdV2} from '../controllers/v2/categoryRouterV2.js'

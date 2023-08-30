@@ -7,8 +7,7 @@ const validatePermissions = (req, res, next) => {
     const urlFormat = req.baseUrl.split('/')[1]
     console.log({"validacion": dataUser.rol_access[urlFormat]});
     if(!(urlFormat in dataUser.rol_access)) return res.json({status:401,message: 'This endpoint is not allowed for this user'});
-   
-   
+
     const allowedMethod = dataUser.rol_access[urlFormat]
     console.log({"allowedMethods": allowedMethod});
     const currentMethod = req.method.toLowerCase();
@@ -23,10 +22,6 @@ const validatePermissions = (req, res, next) => {
     if(!(versions.includes(req.headers["accept-version"]))) return res.json({status:505,message: 'This version is not allowed'})
     next()
 }    
-
-
-
-
 
 export {
     validatePermissions

@@ -38,10 +38,10 @@ const generateToken = async(req, res) => {
     //crecion del token
     const encoder = new TextEncoder();
     const jwtConstructor = await new SignJWT(datauser)
-      .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-      .setIssuedAt()
-      .setExpirationTime('1h')
-      .sign(encoder.encode(process.env.JWT_SECRET));
+        .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+        .setIssuedAt()
+        .setExpirationTime('1h')
+        .sign(encoder.encode(process.env.JWT_SECRET));
     res.send({"Token":jwtConstructor});
 }
     
