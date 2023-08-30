@@ -1,8 +1,6 @@
-
 /**
  * ? consultas para task
  */
-
 /**
  * ! Obtener todas las tareas ordenadas por fecha y con su salida formateada V1 1.3.0
  V3 3.1.0

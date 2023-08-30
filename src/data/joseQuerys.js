@@ -42,10 +42,10 @@ export const tenderoNombre = [
 /**
  * ! obtener todos los tenderos por medio de la cedula V2 2.2.0
  */
-const param2 = "Michael Johnson"
+const identification = 78520
 export const tenderosCedula = [
     {
-        $match : { identification : param2}
+        $match : { identification : identification}
     },
     {
         $project: {
