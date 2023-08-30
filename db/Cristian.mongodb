@@ -561,10 +561,11 @@ db.category.insertMany([
   )
 
 
+
 use("db_campus_rappi");
 db.createCollection("rols", {
     capped: true,
-    size: 1000,
+    size: 3000,
     max: 10,
     validator:{
         $jsonSchema:{
@@ -585,36 +586,162 @@ db.createCollection("rols", {
                     description : "El DESCRIPCION_ROL es un parametro obligatorio y debe ser un string"
                 },
                 rol_access:{  
-                    bsonType: 'array',
-                    description : "El ACCESO_ROLES es un parametro obligatorio y debe ser un ARRAY"
+                    bsonType: 'object',
+                    description: "Ingrese los endpoints a los que tiene acceso, este debe ser un objeto de parametros string",
+                    properties:{
+                        "endpoint":{
+                            bsonType: 'object',
+                            description: "Ingrese los metodos este debe ser un objeto de parametros string",
+                            properties:{
+                                "method":{
+                                    bsonType: "array",
+                                    description: "Ingrese las versiones permitidos por este rol, debe ser un array de string con el numero de la version",
+                                    items: {
+                                        bsonType: "string",
+                                        description: "Ingrese la version autorizada, este debe ser de tipo string",
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
                 }
             }
         }
     }
   })
+  
+  
 
-
-db.rols.insertOne({
+db.rols.insertMany([{
     _id: 1,
     name_rol: "admin",
     description_rol: "Rol de administrador con acceso a todas las colecciones",
-    rol_access: ["category", "user", "task", "shopkeeper", "review", "payment"]
-  });
-  
-  db.rols.insertOne({
+    rol_access:{
+        "user": {
+            "get":["1.2.0","1.3.0","2.0.0","2.1.0","3.0.0","3.1.1","3.2.0","3.3.1"],
+            "post": ["1.1.0"],
+            "delete":["1.1.0"]
+        },
+        "shopkeeper":{
+            "get": ["1.1.0","1.1.1","2.1.0","2.2.0"],
+            "post": ["1.1.0"],
+            "delete":["1.1.0"]
+        },
+        "payment":{
+            "get": ["1.1.0"]
+        },
+        "task": {
+            "get": ["1.1.0","2.1.0", "3.1.0"],
+            "post": ["1.1.0"],
+            "put":["1.1.0"]
+        },
+        "review":{
+            "get": ["1.1.0", "2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "category":{
+            "get": ["2.1.0", "1.1.0","3.1.0"],
+            "post": ["1.1.0"]
+        }
+    }
+    },
+    {
     _id: 2,
     name_rol: "user",
     description_rol: "Rol de usuario con acceso a la colección 'task', 'payment', 'review' y 'category'",
-    rol_access: ["task", "payment", "review","category"]
-  });
-  
-  db.rols.insertOne({
+    rol_access: {
+        "task": {
+            "get": ["2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "payment":{
+            "get": ["1.1.0"]
+        },
+        "review":{
+            "get": ["2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "category":{
+            "get": ["2.1.0", "3.1.0"]
+        }
+    }
+  },{
     _id: 3,
     name_rol: "shopkeeper",
     description_rol: "Rol de comerciante con acceso a la colección 'task' 'payment' y 'review'",
-    rol_access: ["task", "review", "payment"]
-  });
-  
+    rol_access: {
+        "task": {
+            "get": ["2.1.0", "3.1.0"],
+            "put": ["1.1.0"]
+        },
+        "payment":{
+            "get": ["1.1.0"]
+        },
+        "review":{
+            "get": ["2.1.0", "3.1.0"]
+        }
+    }
+  }]);
+  use("db_campus_rappi");
+  db.createCollection("admin", {
+      capped: true,
+      size: 2500,
+      max: 5,
+      validator: {
+          $jsonSchema: {
+              bsonType: 'object',
+              additionalProperties: false,
+              required: ['_id', 'username', 'email', 'password'],
+              properties: {
+                  _id: {
+                      bsonType: "int",
+                      description: "ID del admin"
+                  },
+                  username: {
+                      bsonType: 'string',
+                      minLength: 3,
+                      description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                  },
+                  email: {
+                      bsonType: 'string',
+                      description: 'El email es obligatorio y debe ser válido',
+                      pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                  },
+                  password: {
+                      bsonType: 'string',
+                      minLength: 5,
+                      description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                  },
+                }
+            }
+        }
+    })
+
+    db.admin.insertMany([
+        {
+            _id: 1,
+            username: "jose david ramirez",
+            email: "JDavidRamirez@example.com",
+            password: "admin1"
+        },
+            {
+            _id: 2,
+            username: "C-jimenez",
+            email: "CJimenez21@example.com",
+            password: "admin2"
+        },
+        {
+            _id: 3,
+            username: "Campuslands",
+            email: "campusMigue@example.com",
+            password: "admin3"
+        }
+    ]);
+
+
+
 
 /*
   //consultas task
