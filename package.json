@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "dev": "nodemon --quiet ./src/app.js",
     "tsc": "tsc -w"
@@ -32,9 +32,3 @@
     "typescript": "5.1.6"
   }
 }
-
-
-
-
-
-
