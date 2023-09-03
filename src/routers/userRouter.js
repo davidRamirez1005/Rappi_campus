@@ -12,8 +12,8 @@ const version = routesVersioning();
 appUser.use(limitget());
 //Headers 'Accept-Version: 1.0.0' 
 /**
- * ? obtener todos los usuarios que residen en bucaramanga V1 1.2.0
- * ? obtener todos los usuarios que se registraron antes de una fecha especifica V1 1.3.0
+ * ? obtener todos los usuarios que residen en bucaramanga V1 1.1.0
+ * ? obtener todos los usuarios que se registraron antes de una fecha especifica V1 1.2.0
  * ? obtener todos los pedidos que ha hecho un usuario por medio del nombre del usuario V2 2.0.0
  * ? obtener todos los usuarios que tienen pago pendiente V2 2.1.0
  * ? obtener todos los usuarios que tienen pago pendiente y residen en una ciudad en especifico V3 3.0.0
@@ -23,8 +23,8 @@ appUser.use(limitget());
  * * http://127.0.0.3:5012/user/listar
  */
 appUser.get('/listar',  version({
-    "~1.2.0": getUserBga,
-    "~1.3.0": getRegistro,
+    "~1.1.0": getUserBga,
+    "~1.2.0": getRegistro,
     "~2.0.0": getUserPedidoName,
     "~2.1.0": getUserPendiente,
     "~3.0.0": userPagoPendienteCiudad,
@@ -36,13 +36,13 @@ appUser.get('/listar',  version({
  * ? insertar un nuevo usuario V1 1.0.0
  */
 appUser.post('/agregar', version({
-    "1.0.0" : insertUserV1
+    "1.1.0" : insertUserV1
 }))
 /**
  * ? eliminar un usuario V1 1.0.0
  */
 appUser.delete('/eliminar/:_id', version({
-    "1.0.0" : deleteUser
+    "1.1.0" : deleteUser
 }));
 
 export default appUser;
