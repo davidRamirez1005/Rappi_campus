@@ -33,6 +33,7 @@ export const getRegistro = async(req, res) =>{
 /*
 {
     "username": "benito perez",
+    "identification" : 1012114
     "email": "benito@example.com",
     "password": "benito123",
     "phone": "+578909809",
@@ -40,7 +41,8 @@ export const getRegistro = async(req, res) =>{
         "city": "bucaramanga",
         "street": "san francisco"
     },
-    "registrationDate": "2023-08-27"
+    "registrationDate": "2023-08-27",
+    "rol" : 2
 }
 */
 export const insertUserV1 = async(req, res) =>{

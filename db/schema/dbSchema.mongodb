@@ -1,0 +1,433 @@
+use("db_campus_rappi");
+db.createCollection("counters");
+db.counters.insertMany([
+    {_id : "userId", sequence_value : 0},
+    {_id : "shopkeeperId", sequence_value : 0},
+    {_id : "paymentId", sequence_value : 0},
+    {_id : "taskId", sequence_value : 0},
+    {_id : "reviewId", sequence_value : 0},
+    {_id : "categoryId", sequence_value : 0}
+]);
+/**
+ * ! rols
+ */
+use("db_campus_rappi");
+db.createCollection("rols", {
+    capped: true,
+    size: 3000,
+    max: 10,
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            additionalProperties: false,
+            required : ['_id', 'name_rol','rol_access'],
+            properties:{
+                _id:{
+                    bsonType: 'int',
+                    description : "El ID_ROL es un parametro obligatorio y debe ser un entero"
+                },
+                name_rol:{  
+                    bsonType: 'string',
+                    description : "El NOMBRE_ROL es un parametro obligatorio y debe ser un string"
+                },
+                description_rol:{  
+                    bsonType: 'string',
+                    description : "El DESCRIPCION_ROL es un parametro obligatorio y debe ser un string"
+                },
+                rol_access:{  
+                    bsonType: 'object',
+                    description: "Ingrese los endpoints a los que tiene acceso, este debe ser un objeto de parametros string",
+                    properties:{
+                        "endpoint":{
+                            bsonType: 'object',
+                            description: "Ingrese los metodos este debe ser un objeto de parametros string",
+                            properties:{
+                                "method":{
+                                    bsonType: "array",
+                                    description: "Ingrese las versiones permitidos por este rol, debe ser un array de string con el numero de la version",
+                                    items: {
+                                        bsonType: "string",
+                                        description: "Ingrese la version autorizada, este debe ser de tipo string",
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+})
+/**
+ * ! admin
+ */
+use("db_campus_rappi");
+db.createCollection("admin", {
+    capped: true,
+    size: 2500,
+    max: 5,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'username', 'email', 'password'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del admin"
+                },
+                username: {
+                    bsonType: 'string',
+                    minLength: 3,
+                    description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio y debe ser válido',
+                    pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                },
+                password: {
+                    bsonType: 'string',
+                    minLength: 5,
+                    description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                },
+                rol : {
+                    bsonType: 'number',
+                    description: 'el rol es obligatorio'
+                }
+            }
+        }
+    }
+})
+/**
+ * ! User
+ */
+use("db_campus_rappi");
+db.createCollection("user", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'username', 'identification', 'email', 'password','phone','address', 'registrationDate', 'rol'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                username: {
+                    bsonType: 'string',
+                    minLength: 3,
+                    description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                },
+                identification : {
+                    bsonType: 'number',
+                    description: "el numero de identificacion es obligatorio"
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio y debe ser válido',
+                    pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                }
+                ,
+                password: {
+                    bsonType: 'string',
+                    minLength: 5,
+                    description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                },
+                phone: {
+                    "bsonType": "string",
+                    "description": "El teléfono es obligatorio y debe cumplir con ciertas restricciones",
+                    "pattern": "[+\\-0-9\\s]+$"
+                },
+                address: {
+                    "bsonType": "object",
+                    "required": ["city", "street"],
+                    "properties": {
+                        "city": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la ciudad."
+                        },
+                        "street": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la calle."
+                        }
+                    }},
+                registrationDate: {
+                    bsonType: 'date',
+                    description: 'la fecha registrada es obligatoria'
+                },
+                rol : {
+                    bsonType: 'number',
+                    description: 'el rol es obligatorio'
+                }
+            }
+        }
+    }
+});
+/**
+ * ! shopkeeper
+ */
+use("db_campus_rappi");
+db.createCollection("shopkeeper", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'name', 'identification', 'email', 'password','phone','address', 'availability', 'rol'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                name: {
+                    bsonType: 'string',
+                    minLength: 3,
+                    description: "el nombre debe contener minimo 3 caracteres, y es obligatorio"
+                },
+                identification : {
+                    bsonType: 'number',
+                    description: "el numero de identificacion es obligatorio"
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio y debe ser válido',
+                    pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                }
+                ,
+                password: {
+                    bsonType: 'string',
+                    minLength: 5,
+                    description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
+                },
+                phone: {
+                    "bsonType": "string",
+                    "description": "El teléfono es obligatorio y debe cumplir con ciertas restricciones",
+                    "pattern": "[+\\-0-9\\s]+$"
+                },
+                address: {
+                    "bsonType": "object",
+                    "required": ["city", "street"],
+                    "properties": {
+                        "city": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la ciudad."
+                        },
+                        "street": {
+                            "bsonType": "string",
+                            "description": "Debe ser una cadena que representa la calle."
+                        }
+                    }},
+                availability: {
+                    bsonType: 'bool',
+                    description: 'la disponobilidad del tendero es obligatoria'
+                },
+                rol : {
+                    bsonType: 'number',
+                    description: 'el rol es obligatorio'
+                }
+            }
+        }
+    }
+});
+/**
+ * ! payment
+ */
+use("db_campus_rappi");
+db.createCollection("payment", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'task_id', 'amount', 'paymentDate','paymentMethod','status'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                task_id: {
+                    bsonType: 'int',
+                    description: "el id de la tarea es obligatorio"
+                },
+                amount: {
+                    bsonType: 'int',
+                    description: 'El precio es obligatorio y debe ser numerico'
+                },
+                paymentDate: {
+                    bsonType: 'date',
+                    description: "la fecha es obligatorio"
+                },
+                paymentMethod : {
+                    "bsonType": "string",
+                    "items": {
+                        "enum": ["nequi", "bancolombia", "pse", "daviplata", "efectivo"]
+                    }
+                },
+                status: {
+                    "bsonType": "string",
+                    "description": "El estado es obligatorio",
+                }
+            }
+        }
+    }
+});
+/**
+ * ! task
+ */
+use("db_campus_rappi");
+db.createCollection("task", {
+    capped: true,
+    size: 5000,
+    max: 70,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'title', 'description', 'user_id','shopkeeper_id','status', 'createdAt', "category_id","payment_id"],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "id_tarea del usuario"
+                },
+                title: {
+                    bsonType: 'string',
+                    description: "el titulo_tarea debe contener minimo 20 caracteres, y es obligatorio"
+                },
+                description: {
+                    bsonType: 'string',
+                    description: 'La descripcion es obligatoria y debe ser un string',
+                },
+                user_id: {
+                    bsonType: 'int',
+                    description: "El id_usuario debe ser un numero entero, y es obligatorio"
+                },
+                shopkeeper_id: {
+                    bsonType: "int",
+                    description: "El id_tendero debe ser un numero entero, y es obligatorio"
+                },
+                status: {
+                    enum: ["Solicitado", "Asignado", "Completado", "Cancelado", "en Proceso"],
+                    description: "Debe ser un estado valido es decir, 'Solicitado', 'Asignado', 'Completado', 'Cancelado', o 'en Proceso'"
+                },
+                createdAt: {
+                    bsonType: 'date',
+                    description: 'la fecha_creacion es obligatoria y debe ser un formato valido'
+                },
+                category_id: {
+                    bsonType: "int",
+                    description: "El id_categoria debe ser un numero entero, y es obligatorio"
+                },
+                address: {
+                    bsonType: "object",
+                    required: ["city", "street"],
+                    properties: {
+                        city: {
+                            enum: ["Bogotá","Medellin","Cali","Barranquilla","Cartagena","Cucuta","Bucaramanga","Pereira","Santa Marta","Pasto","Manizales","Neiva","Armenia","Villavicencio","Valledupar","Montería","Sincelejo"],
+                            description: "Ciudad debe ser una ciudad en la que estemos presentes"
+                        },
+                        street: {
+                            bsonType: "string",
+                            pattern: "^[a-zA-Z0-9,|°#\\-() ]+$", 
+                            minLength: 5,
+                            maxLength: 100, 
+                            description: "La dirección debe cumplir con ciertos criterios."
+                        }
+                        }
+                    },
+                payment_id: {
+                    bsonType: "int",
+                    description: "El id_pago debe ser un numero entero, y es obligatorio"
+                    }
+                }
+            }
+        }
+});
+/**
+ * ! review
+ */
+use("db_campus_rappi");
+db.createCollection("review", {
+    capped: true,
+    size: 4000,
+    max: 70,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'task_id', 'user_id','rating', 'createdAt'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "El id_review debe ser un numero entero, y es obligatorio"
+                },
+                task_id: {
+                    bsonType: 'int',
+                    description: "El id_tarea debe ser un numero entero, y es obligatorio"
+                },
+                user_id: {
+                    bsonType: 'int',
+                    description: "El id_usuario debe ser un numero entero, y es obligatorio"
+                },
+                rating: {
+                    bsonType: "int",
+                    pattern: "^[1-5]$", 
+                    description: "La calificacion debe ser un numero entero entre 1 y 5, y es obligatorio"
+                },
+                comment: {
+                    bsonType: ['string', 'null'],
+                    maxLength:500,
+                    description: "El comentario debe ser un string y no puede superar los 500 caracteres"
+                },
+                createdAt: {
+                    bsonType: 'date',
+                    description: 'la fecha_creacion es obligatoria y debe ser un formato valido'
+                }
+            }
+            }
+        }
+});
+/**
+ * ! category
+ */
+use("db_campus_rappi");
+db.createCollection("category", {
+    capped: true,
+    size: 1500,
+    max: 10,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'name', 'description'],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    description: "El id_categoria debe ser un numero entero, y es obligatorio"
+                },
+                name: {
+                    bsonType: 'string',
+                    description: "el nombre_categoria debe contener minimo 20 caracteres, y es obligatorio"
+                },
+                description: {
+                    bsonType: 'string',
+                    description: 'La descripcion_categoria es obligatoria y debe ser un string',
+                },
+                icon: {
+                    bsonType: "string",
+                    description: "El icono_categoria debe ser un string valido (ej. fas fa-birthday-cake)"
+                }
+            }
+
+        }
+    }
+});

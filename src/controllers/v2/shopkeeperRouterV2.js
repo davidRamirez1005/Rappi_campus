@@ -14,12 +14,13 @@ export const getTenderosName = async(req, res) =>{
     res.send(result)
 }
 /**
- * * obtener todos los tenderos por medio del nombre V2 2.1.0
+ * * obtener todos los tenderos por medio de la cedula V2 2.1.0
  */
 export const getTenderosCedula = async(req, res) =>{
     if(!req.rateLimit) return;
+    const {cedula} = req.params;
 
-    let coleccion = await genCollection('shopkeeper')
-    let result = await coleccion.aggregate(tenderosCedula).toArray();
+    let coleccion = await genCollection("shopkeeper")
+    let result = await coleccion.findOne({"identification": cedula});
     res.send(result)
 }

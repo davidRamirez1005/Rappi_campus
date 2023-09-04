@@ -1,0 +1,843 @@
+/**
+ * ? funcion para auto incremento del Id
+*/
+use("db_campus_rappi");
+function siguienteId(coleccion) {
+    const sequenceDocument = db.counters.findOneAndUpdate(
+        { _id: `${coleccion}Id` },
+        { $inc: { sequence_value: 1 } },
+        { returnDocument: "after" }
+    );
+    return sequenceDocument.sequence_value;
+};
+/**
+ * ! rols
+ */
+use("db_campus_rappi");
+db.rols.insertMany([{
+    _id: 1,
+    name_rol: "admin",
+    description_rol: "Rol de administrador con acceso a todas las colecciones",
+    rol_access:{
+        "user": {
+            "get":["1.1.0","1.2.0","2.0.0","2.1.0","3.0.0","3.1.1","3.2.0","3.3.1"],
+            "post": ["1.1.0"],
+            "delete":["1.1.0"]
+        },
+        "shopkeeper":{
+            "get": ["1.1.0","1.2.0","2.0.0","2.1.0"],
+            "post": ["1.1.0"],
+            "delete":["1.1.0"]
+        },
+        "payment":{
+            "post": ["1.1.0"]
+        },
+        "task": {
+            "get": ["1.1.0","2.1.0", "3.1.0"],
+            "post": ["1.1.0"],
+            "put":["1.1.0"]
+        },
+        "review":{
+            "get": ["1.1.0", "2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "category":{
+            "get": ["2.1.0", "1.1.0","3.1.0"],
+            "post": ["1.1.0"]
+        }
+    }
+    },
+    {
+    _id: 2,
+    name_rol: "user",
+    description_rol: "Rol de usuario con acceso a la colección 'task', 'payment', 'review' y 'category'",
+    rol_access: {
+        "task": {
+            "get": ["2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "payment":{
+            "get": ["1.1.0"]
+        },
+        "review":{
+            "get": ["2.1.0", "3.1.0"],
+            "post": ["1.1.0"]
+        },
+        "category":{
+            "get": ["2.1.0", "3.1.0"]
+        }
+    }
+  },{
+    _id: 3,
+    name_rol: "shopkeeper",
+    description_rol: "Rol de comerciante con acceso a la colección 'task' 'payment' y 'review'",
+    rol_access: {
+        "task": {
+            "get": ["2.1.0", "3.1.0"],
+            "put": ["1.1.0"]
+        },
+        "payment":{
+            "get": ["1.1.0"]
+        },
+        "review":{
+            "get": ["2.1.0", "3.1.0"]
+        }
+    }
+}]);
+/**
+ * ! admin
+ */
+use("db_campus_rappi");
+db.admin.insertMany([
+    {
+        _id: 1,
+        username: "jose david ramirez",
+        email: "JDavidRamirez@example.com",
+        password: "admin1",
+        rol : 1
+    },
+        {
+        _id: 2,
+        username: "C-jimenez",
+        email: "CJimenez21@example.com",
+        password: "admin2",
+        rol : 1
+    },
+    {
+        _id: 3,
+        username: "Campuslands",
+        email: "campusMigue@example.com",
+        password: "admin3",
+        rol : 1
+    }
+]);
+/**
+ * ! User
+ */
+use("db_campus_rappi");
+db.user.insertMany([
+    {
+        _id: Number(siguienteId("user")),
+        username: "jose david ramirez",
+        identification : 12345,
+        email: "josedavid@example.com",
+        password: "secreto",
+        phone: "+123456789",
+        address: {
+        city: "bucaramanga",
+        street: "Calle Principal"
+        },
+        registrationDate: ISODate("2023-08-19"),
+        rol : 2
+    },
+        {
+        _id: Number(siguienteId("user")),
+        username: "juan diego",
+        identification : 56456,
+        email: "juandiego@example.com",
+        password: "juan123",
+        phone: "+123456789",
+        address: {
+        city: "piedecuesta",
+        street: "Calle Principal"
+        },
+        registrationDate: ISODate("2023-08-20"),
+        rol : 2
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "maria.gonzalez",
+        identification : 74125,
+        email: "maria@example.com",
+        password: "contraseña123",
+        phone: "+987654321",
+        address: {
+            city: "Medellín",
+            street: "Avenida Principal"
+        },
+        registrationDate: ISODate("2023-08-20"),
+        rol : 2
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "alex Anonymous",
+        identification : 58963,
+        email: "alex@example.com",
+        password: "mypassword",
+        phone: "+555123456",
+        address: {
+            city: "bucaramanaga",
+            street: "123 Main Street"
+        },
+        registrationDate: ISODate("2023-08-20"),
+        rol : 2
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "laura.johnson",
+        identification : 45632,
+        email: "laura@example.com",
+        password: "securepass",
+        phone: "+789456123",
+        address: {
+            city: "floridablanca",
+            street: "Sunset Boulevard"
+        },
+        registrationDate: ISODate("2023-08-21"),
+        rol : 2
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "juan.perez",
+        identification : 36541,
+        email: "juan@example.com",
+        password: "miclave",
+        phone: "+123123123",
+        address: {
+            city: "giron",
+            street: "Calle Juarez"
+        },
+        registrationDate: ISODate("2023-08-21"),
+        rol : 2
+    },
+    {
+        _id: Number(siguienteId("user")),
+        username: "nico williams",
+        identification : 78965,
+        email: "emily@example.com",
+        password: "emilyspass",
+        phone: "+444555666",
+        address: {
+            city: "bucaramanga",
+            street: "Baker Street"
+        },
+        registrationDate: ISODate("2023-08-22"),
+        rol : 2
+    } 
+]);
+/**
+ * ! shopkeeper
+ */
+use("db_campus_rappi");
+db.shopkeeper.insertMany([
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "luis caicedo",
+        identification : 78520,
+        email: "luis@example.com",
+        password: "domi123",
+        phone: "+123456789",
+        address: {
+        city: "bucaramanga",
+        street: "Calle Principal"
+        },
+        availability: true,
+        rol : 3
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name : "Ana Martinez",
+        identification : 55235,
+        email: "ana@example.com",
+        password: "ana456",
+        phone: "+987654321",
+        address: {
+            "city": "piedecuesta",
+            "street": "Calle Principal"
+        },
+        availability: false,
+        rol : 3
+    }
+    ,
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Michael Johnson",
+        identification : 889656,
+        email: "michael@example.com",
+        password: "mikepass",
+        phone: "+987654321",
+        address: {
+            city: "Medellín",
+            street: "Avenida Principal"
+        },
+        availability: true,
+        rol : 3
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Sophie Martin",
+        identification : 414452,
+        email: "sophie@example.com",
+        password: "sophie789",
+        phone: "+555123456",
+        address: {
+            city: "bucaramanga",
+            street: "123 Main Street"
+        },
+        availability: false,
+        rol : 3
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "laura.johnson",
+        identification : 12352,
+        email: "laura@example.com",
+        password: "securepass",
+        phone: "+789456123",
+        address: {
+            city: "floridablanca",
+            street: "Sunset Boulevard"
+        },
+        availability: true,
+        rol : 3
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "Carlos Gonzalez",
+        identification : 859756,
+        email: "carlos@example.com",
+        password: "car123",
+        phone: "+123123123",
+        address: {
+            city: "piedecuesta",
+            street: "Calle Juarez"
+        },
+        availability: true,
+        rol : 3
+    },
+    {
+        _id: Number(siguienteId("shopkeeper")),
+        name: "francisco mora",
+        identification : 320654,
+        email: "fran@example.com",
+        password: "micontra123",
+        phone: "+444555666",
+        address: {
+            city: "giron",
+            street: "Baker Street"
+        },
+        availability: false,
+        rol : 3
+    } 
+]);
+/**
+ * ! payment
+ */
+use("db_campus_rappi");
+db.payment.insertMany([
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 1,
+        amount: 50000,
+        paymentDate: ISODate("2023-08-20"),
+        paymentMethod: "nequi",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 2,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "bancolombia",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 3,
+        amount: 20000,
+        paymentDate: ISODate("2023-08-26"),
+        paymentMethod: "bancolombia",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 4,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "efectivo",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id:5,
+        amount: 10000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod:"efectivo",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 6,
+        amount: 30000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "daviplata",
+        status: "aprobado"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 7,
+        amount: 40000,
+        paymentDate: ISODate("2023-08-21"),
+        paymentMethod: "bancolombia",
+        status: "pendiente"
+    },
+    {
+        _id: Number(siguienteId("payment")),
+        task_id: 8,
+        amount: 25000,
+        paymentDate: ISODate("2023-08-30"),
+        paymentMethod: "nequi",
+        status: "pendiente"
+    },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 9,
+            amount: 25000,
+            paymentDate: ISODate("2023-08-30"),
+            paymentMethod: "nequi",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 10,
+            amount: 5000,
+            paymentDate: ISODate("2023-08-31"),
+            paymentMethod: "bancolombia",
+            status: "aprobado"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 11,
+            amount: 30000,
+            paymentDate: ISODate("2023-09-01"),
+            paymentMethod: "daviplata",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 12,
+            amount: 15000,
+            paymentDate: ISODate("2023-09-02"),
+            paymentMethod: "efectivo",
+            status: "aprobado"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 13,
+            amount: 20000,
+            paymentDate: ISODate("2023-09-03"),
+            paymentMethod: "nequi",
+            status: "pendiente"
+        },
+        {
+            _id: Number(siguienteId("payment")),
+            task_id: 14,
+            amount: 10000,
+            paymentDate: ISODate("2023-09-04"),
+            paymentMethod: "bancolombia",
+            status: "pendiente"
+        }
+]);
+/**
+ * ! task
+ */
+use("db_campus_rappi");
+db.task.insertMany([
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 1 - Recoger paquetes",
+        description: "Se debe recoger un paquete para enviarlo por correspondencia",
+        user_id: 1,
+        shopkeeper_id: 1,
+        status: "Completado",
+        address: {
+            city: "Medellin",
+            street: "calle 20 N°23-24 (Versalles)"
+        },
+        category_id: 1,
+        payment_id: 1,
+        createdAt: ISODate("2023-08-19")
+    },{
+        _id: Number(siguienteId("task")),
+        title: "titulo 2 - Sacar perros",
+        description: "Se debe sacar a pásear mis perrros",
+        user_id: 2,
+        shopkeeper_id: 2,
+        status: "Asignado",
+        address: {
+            city: "Bucaramanga",
+            street: "calle 20 N°23-24 (San alonso)"
+        },
+        category_id: 2,
+        payment_id: 2,
+        createdAt: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 3 - Comprar mercado ",
+        description: "Se deben comprar huevos, shampoo y perfume",
+        user_id: 3,
+        shopkeeper_id: 3,
+        status: "Solicitado",
+        address: {
+            city: "Bogotá",
+            street: "carrera 30 #23-24"
+        },
+        category_id: 3,
+        payment_id: 3,
+        createdAt: ISODate("2023-08-21")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 1 - Recoger paquetes",
+        description: "Se debe recoger un paquete para enviarlo por correspondencia",
+        user_id: 5,
+        shopkeeper_id: 6,
+        status: "Completado",
+        address: {
+            city: "Medellin",
+            street: "calle 20 N°23-24 (Versalles)"
+        },
+        category_id: 5,
+        payment_id: 4,
+        createdAt: ISODate("2023-08-19")
+    },{
+        _id: Number(siguienteId("task")),
+        title: "titulo 2 - Sacar perros",
+        description: "Se debe sacar a pásear mis perrros",
+        user_id: 7,
+        shopkeeper_id: 2,
+        status: "Asignado",
+        address: {
+            city: "Bucaramanga",
+            street: "calle 20 N°23-24 (San alonso)"
+        },
+        category_id: 7,
+        payment_id: 8,
+        createdAt: ISODate("2023-08-20")
+    },
+    {
+        _id: Number(siguienteId("task")),
+        title: "titulo 3 - Comprar mercado ",
+        description: "Se deben comprar huevos, shampoo y fresas",
+        user_id: 6,
+        shopkeeper_id: 3,
+        status: "Solicitado",
+        address: {
+            city: "Bogotá",
+            street: "carrera 30 #23-24"
+        },
+        category_id: 2,
+        payment_id: 3,
+        createdAt: ISODate("2023-08-21")
+    },
+        {
+        _id: Number(siguienteId("task")),
+            title: "Reparación de jardineria",
+            description: "Se necesita reparar el jardin que esta vuelto nada.",
+            user_id: 2,
+            shopkeeper_id: 5,
+            status: "Solicitado",
+            createdAt: ISODate("2023-08-22"),
+            category_id: 2,
+            address: {
+                city: "Bogotá",
+                street: "Calle 123"
+            },
+            payment_id: 4 
+        },
+        {
+        _id: Number(siguienteId("task")),
+            title: "Limpieza a fondo",
+            description: "Necesito una limpieza profunda para mi apartamento.",
+            user_id: 4,
+            shopkeeper_id: 6,
+            status: "Asignado",
+            createdAt: ISODate("2023-08-23"),
+            category_id: 3,
+            address: {
+                city: "Medellin",
+                street: "Carrera 456"
+            },
+            payment_id: 5
+        },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Podar arbustos en el jardín",
+                description: "Necesito que alguien poda los arbustos en mi jardín trasero.",
+                user_id: 3,
+                shopkeeper_id: 6,
+                status: "Completado",
+                createdAt: ISODate("2023-08-24"),
+                category_id: 2,
+                address: {
+                    city: "Cali",
+                    street: "Avenida 789"
+                },
+                payment_id: 6
+            },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Cuidado de perro durante el fin de semana",
+                description: "Requiero alguien que cuide de mi perro mientras estoy fuera durante el fin de semana.",
+                user_id: 4,
+                shopkeeper_id: 2,
+                status: "en Proceso",
+                createdAt: ISODate("2023-08-25"),
+                category_id: 3,
+                address: {
+                    city: "Barranquilla",
+                    street: "Calle 234"
+                },
+                payment_id: 7
+            },
+            {
+        _id: Number(siguienteId("task")),
+                title: "Entrega de comida a domicilio",
+                description: "Necesito que me traigan una pizza a mi casa.",
+                user_id: 5,
+                shopkeeper_id: 7,
+                status: "Solicitado",
+                createdAt: ISODate("2023-08-26"),
+                category_id: 4,
+                address: {
+                    city: "Cartagena",
+                    street: "Carrera 567"
+                },
+                payment_id: 8
+            },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Clases de piano para principiantes",
+                    description: "Busco un profesor de piano para dar clases a un principiante.",
+                    user_id: 6,
+                    shopkeeper_id: 2,
+                    status: "Asignado",
+                    createdAt: ISODate("2023-08-27"),
+                    category_id: 5,
+                    address: {
+                        city: "Cucuta",
+                        street: "Calle 678"
+                    },
+                    payment_id: 9
+                },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Transporte al aeropuerto",
+                    description: "Necesito un conductor que me lleve al aeropuerto mañana temprano.",
+                    user_id: 7,
+                    shopkeeper_id: 4,
+                    status: "en Proceso",
+                    createdAt: ISODate("2023-08-28"),
+                    category_id: 6,
+                    address: {
+                        city: "Bucaramanga",
+                        street: "Avenida 789"
+                    },
+                    payment_id: 10
+                },
+                {
+        _id: Number(siguienteId("task")),
+                    title: "Planificación de fiesta de cumpleaños",
+                    description: "Busco a alguien que me ayude a organizar una fiesta de cumpleaños para mi hijo.",
+                    user_id: 8,
+                    shopkeeper_id: 8,
+                    status: "Solicitado",
+                    createdAt: ISODate("2023-08-29"),
+                    category_id: 8,
+                    address: {
+                        city: "Pereira",
+                        street: "Carrera 123"
+                    },
+                    payment_id: 11
+                },
+            
+      
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Reparación de filtro de aire acondicionado",
+                        description: "Necesito que alguien repare el filtro de mi unidad de aire acondicionado.",
+                        user_id: 4,
+                        shopkeeper_id: 1,
+                        status: "Completado",
+                        createdAt: ISODate("2023-08-30"),
+                        category_id: 1,
+                        address: {
+                            city: "Santa Marta",
+                            street: "Calle 789"
+                        },
+                        payment_id: 12
+                    },
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Clases de inglés avanzado",
+                        description: "Estoy interesado en tomar clases de inglés avanzado para mejorar mi fluidez.",
+                        user_id: 4,
+                        shopkeeper_id: 2,
+                        status: "Solicitado",
+                        createdAt: ISODate("2023-08-31"),
+                        category_id: 5,
+                        address: {
+                            city: "Pasto",
+                            street: "Carrera 456"
+                        },
+                        payment_id: 13
+                    },
+                    {
+        _id: Number(siguienteId("task")),
+                        title: "Corte de césped",
+                        description: "Necesito que alguien corte el césped en mi jardín delantero.",
+                        user_id: 6,
+                        shopkeeper_id: 3,
+                        status: "Asignado",
+                        createdAt: ISODate("2023-09-01"),
+                        category_id: 2,
+                        address: {
+                            city: "Manizales",
+                            street: "Avenida 123"
+                        },
+                        payment_id: 14
+                    }
+])
+/**
+ * ! category
+ */
+use("db_campus_rappi");
+db.category.insertMany([
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Reparaciones",
+      "description": "Servicios de reparación y mantenimiento en el hogar.",
+      "icon": "fas fa-tools"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Limpieza",
+      "description": "Servicios de limpieza y organización en el hogar o la oficina.",
+      "icon": "fas fa-broom"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Jardinería",
+      "description": "Cuidado y mantenimiento de jardines y áreas verdes.",
+      "icon": "fas fa-leaf"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Cuidado de Mascotas",
+      "description": "Cuidado de perros, gatos y otras mascotas.",
+      "icon": "fas fa-paw"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Reparto de Comida",
+      "description": "Entrega de alimentos a domicilio.",
+      "icon": "fas fa-pizza-slice"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Clases Particulares",
+      "description": "Clases de idiomas, música, deportes y más.",
+      "icon": "fas fa-graduation-cap"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Transporte",
+      "description": "Servicios de transporte de personas o paquetes.",
+      "icon": "fas fa-car"
+    },
+    {
+      "_id": Number(siguienteId("category")),
+      "name": "Eventos",
+      "description": "Organización y planificación de eventos especiales.",
+      "icon": "fas fa-birthday-cake"
+    }
+]);
+/**
+ * ! review
+ */
+use("db_campus_rappi");
+db.review.insertMany(
+    [
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 1,
+          "user_id": 2,
+          "rating": 4,
+          "comment": "Muy buen trabajo",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 2,
+          "user_id": 3,
+          "rating": 5,
+          "comment": "Excelente servicio, lo recomiendo.",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 3,
+          "user_id": 1,
+          "rating": 3,
+          "comment": "Cumplió con lo esperado.",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 4,
+          "user_id": 5,
+          "rating": 2,
+          "comment": "No fue tan bueno como esperaba.",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 5,
+          "user_id": 1,
+          "rating": 5,
+          "comment": "Increíble trabajo, muy satisfecho.",
+          "createdAt": ISODate("2023-08-18")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 1,
+          "user_id": 3,
+          "rating": 4,
+          "comment": "Buen servicio, lo recomiendo.",
+          "createdAt": ISODate("2023-08-19")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 2,
+          "user_id": 4,
+          "rating": 3,
+          "comment": "Podría haber sido mejor.",
+          "createdAt": ISODate("2023-08-19")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 3,
+          "user_id": 5,
+          "rating": 1,
+          "comment": "Muy decepcionado con el resultado.",
+          "createdAt": ISODate("2023-08-19")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 4,
+          "user_id": 2,
+          "rating": 5,
+          "comment": "Superó mis expectativas, excelente.",
+          "createdAt": ISODate("2023-08-19")
+        },
+        {
+          "_id": Number(siguienteId('review')),
+          "task_id": 5,
+          "user_id": 4,
+          "rating": 3,
+          "comment": "Un trabajo decente.",
+          "createdAt": ISODate("2023-08-19")
+        }
+])
+
