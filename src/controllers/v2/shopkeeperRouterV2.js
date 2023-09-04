@@ -22,5 +22,5 @@ export const getTenderosCedula = async(req, res) =>{
 
     let coleccion = await genCollection("shopkeeper")
     let result = await coleccion.findOne({"identification": Number(identification)});
-    res.send(result)
+    (result) ? res.send(result) : res.status(404).send({"status": 404, "message": `El tendero con el id ${identification} no existe`});
 }
