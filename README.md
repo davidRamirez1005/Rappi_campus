@@ -123,7 +123,7 @@ https://github.com/davidRamirez1005/Rappi_campus
 
    <img src="./src/assets/db.png" alt="tabalasDB" />
 
-Una vez que observamos que el servidor esta activo y la base de datos instalada, procedemos a acceder a los router, sin embargo debemos generar el token antes por lo que procedemos:
+Una vez que observamos que el servidor esta activo y la base de datos instalada, procedemos a acceder a los router, sin embargo debemos generar el token antes por lo que procedemos: o  use  => mongodb+srv://rappi:rappi123@cluster0.b0o2rzg.mongodb.net/
 
 #### **Ir el método POST **
 
@@ -367,7 +367,7 @@ A continuación, se describen los endpoints disponibles en la aplicación junto 
 
 **Versión**: 2.1.0
 
-- **GET** -- *obtener todos los tenderos por medio de la cedula* => `http://127.0.0.3:5012/shopkeeper/listar/3`
+- **GET** -- *obtener todos los tenderos por medio de la cedula* => `http://127.0.0.3:5012/shopkeeper/listar/78520`
 
 ------
 
@@ -650,4 +650,4 @@ http://127.0.0.3:5012/category
 
 
 
-Si tienes alguna pregunta o comentario sobre esta aplicación, no dudes en ponerte en contacto con nosotros a través dejosedavid.ramirez1005@gmail.com o  [cristianjj21@gmail.com](mailto:cristianjj21@gmail.com). ¡Esperamos que disfrutes usando nuestra aplicación de agendamiento de citas odontológicas!
+Si tienes alguna pregunta o comentario sobre esta aplicación, no dudes en ponerte en contacto con nosotros a través de josedavid.ramirez1005@gmail.com o  [cristianjj21@gmail.com](mailto:cristianjj21@gmail.com). ¡Esperamos que disfrutes usando nuestra aplicación de rappi favores!
