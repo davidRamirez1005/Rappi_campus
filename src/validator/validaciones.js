@@ -58,7 +58,15 @@ const validationLogin = [
     check('ROL_EMAIL').isEmail().withMessage('el ROL_EMAIL es obligatorio y debe ser string ademas debe cumplir las caracteristicas de un e-mail'),
     check('ROL_PASSWORD').isString().withMessage('la ROL_PASSWORD es obligatoria y debe ser string'),
 ];
-export { validationLogin, validationUser, validationShopkeeper, validationPayment, validationTask, validationReview , validationCategory};
+
+const validationTaskUpdate = [
+    check('Id_Tarea').notEmpty().isNumeric().withMessage('el Id_Tarea es obligatorio y debe ser numerico'),
+    check('Estado').isIn(["Solicitado", "Asignado", "Completado", "Cancelado", "en Proceso"]).withMessage("Debe ser un estado valido es decir, 'Solicitado', 'Asignado', 'Completado', 'Cancelado', o 'en Proceso'"),
+    ];
+
+export {validationTaskUpdate, validationLogin, validationUser, validationShopkeeper, validationPayment, validationTask, validationReview , validationCategory};
+
+
 
 
 /** _id: Number(siguienteId("task")),

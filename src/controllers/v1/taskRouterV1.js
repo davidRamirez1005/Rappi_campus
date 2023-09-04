@@ -1,7 +1,7 @@
 import siguienteId from '../../helpers/autoincrementoId.js'
 import genCollection from '../../helpers/db.js';
 import { validationResult } from 'express-validator';
-import {validationTask} from '../../validator/validaciones.js'
+import {validationTask, validationTaskUpdate} from '../../validator/validaciones.js'
 
 
 /**
@@ -91,6 +91,13 @@ export const updateTask = async(req, res) =>{
     if (!req.rateLimit) return;
 
     try {
+        await Promise.all(validationTaskUpdate.map(rule => rule.run(req)));
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         let coleccion = await genCollection('task')
         const { Id_Tarea: id, Estado: status } = req.body;
         let result = await coleccion.findOneAndUpdate(
