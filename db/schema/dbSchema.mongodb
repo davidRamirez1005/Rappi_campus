@@ -93,6 +93,10 @@ db.createCollection("admin", {
                     minLength: 5,
                     description: "la contraseña debe contener minimo 5 caracteres, y es obligatorio"
                 },
+                rol : {
+                    bsonType: 'number',
+                    description: 'el rol es obligatorio'
+                }
             }
         }
     }

@@ -93,19 +93,22 @@ db.admin.insertMany([
         _id: 1,
         username: "jose david ramirez",
         email: "JDavidRamirez@example.com",
-        password: "admin1"
+        password: "admin1",
+        rol : 1
     },
         {
         _id: 2,
         username: "C-jimenez",
         email: "CJimenez21@example.com",
-        password: "admin2"
+        password: "admin2",
+        rol : 1
     },
     {
         _id: 3,
         username: "Campuslands",
         email: "campusMigue@example.com",
-        password: "admin3"
+        password: "admin3",
+        rol : 1
     }
 ]);
 /**
