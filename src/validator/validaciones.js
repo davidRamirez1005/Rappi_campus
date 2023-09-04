@@ -50,7 +50,13 @@ const validationCategory = [
     check('Descripcion').notEmpty().isString().withMessage('La Descripcion es obligatoria y debe ser string '),
     check('Icono').optional().isString().withMessage('el Icono es opcional y debe ser string que sea fas'),
 ];
-export { validationUser, validationShopkeeper, validationPayment, validationTask, validationReview , validationCategory};
+
+const validationLogin = [
+    check('ROL').isIn(["admin", "user", "shopkeeper"]).withMessage("Debe ser un estado valido es decir, 'admin', 'user', 'shopkeeper'"),
+    check('ROL_EMAIL').isEmail().withMessage('el ROL_EMAIL es obligatorio y debe ser string ademas debe cumplir las caracteristicas de un e-mail'),
+    check('ROL_PASSWORD').isString().withMessage('la ROL_PASSWORD es obligatoria y debe ser string'),
+];
+export { validationLogin, validationUser, validationShopkeeper, validationPayment, validationTask, validationReview , validationCategory};
 
 
 /** _id: Number(siguienteId("task")),

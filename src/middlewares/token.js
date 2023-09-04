@@ -1,6 +1,7 @@
 import genCollection from "../helpers/db.js";
 import { SignJWT, jwtVerify } from "jose";
-
+import { validationLogin } from "../validator/validaciones.js";
+import { validationResult } from 'express-validator';
 
 /*
 "email_registro": "usuario@example.com",
@@ -25,7 +26,14 @@ ROL = ["user", "shopkeeper", "admin"]
 
 const generateToken = async(req, res) => {
     //Validacion de las credenciales de login
+    await Promise.all(validationLogin.map(rule => rule.run(req)));
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     const {ROL_EMAIL: email ,ROL_PASSWORD: psw, ROL: coleccion_name} = req.body;
+    
     const coleccion = await genCollection(coleccion_name)
     console.log({"coleccion": coleccion_name});
     const result = await coleccion.findOne({"email":email, "password": psw })
