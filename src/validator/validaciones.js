@@ -2,6 +2,7 @@ import { check } from 'express-validator';
 
 const validationUser = [
     check('username').notEmpty().isString().withMessage('el nombre es obligatorio y debe ser string'),
+    check('identification').notEmpty().isNumeric().withMessage('el numero de identificacion es obligatorio y debe ser numerico'),
     check('email').isEmail().withMessage('el email es obligatorio y debe ser string ademas debe cumplir las caracteristicas de un e-mail'),
     check('password').isString().withMessage('la contraseña es obligatoria y debe ser string'),
     check('phone').isString().notEmpty().withMessage('es obligatorio el numero de telefono y debe ser string'),
@@ -11,6 +12,7 @@ const validationUser = [
 ];
 const validationShopkeeper = [
     check('name').notEmpty().isString().withMessage('el nombre es obligatorio y debe ser string'),
+    check('identification').notEmpty().isNumeric().withMessage('el numero de identificacion es obligatorio y debe ser numerico'),
     check('email').isEmail().withMessage('el email es obligatorio y debe ser string ademas debe cumplir las caracteristicas de un e-mail'),
     check('password').isString().withMessage('la contraseña es obligatoria y debe ser string'),
     check('phone').isString().notEmpty().withMessage('es obligatorio el numero de telefono y debe ser string'),
