@@ -18,9 +18,9 @@ export const getTenderosName = async(req, res) =>{
  */
 export const getTenderosCedula = async(req, res) =>{
     if(!req.rateLimit) return;
-    const {cedula} = req.params;
+    const {identification} = req.params;
 
     let coleccion = await genCollection("shopkeeper")
-    let result = await coleccion.findOne({"identification": cedula});
+    let result = await coleccion.findOne({"identification": Number(identification)});
     res.send(result)
 }
