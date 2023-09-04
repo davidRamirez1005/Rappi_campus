@@ -23,14 +23,14 @@ appUser.use(limitget());
  * * http://127.0.0.3:5012/user/listar
  */
 appUser.get('/listar',  version({
-    "~1.1.0": getUserBga,
-    "~1.2.0": getRegistro,
-    "~2.0.0": getUserPedidoName,
-    "~2.1.0": getUserPendiente,
-    "~3.0.0": userPagoPendienteCiudad,
-    "~3.1.1": userPagoPendienteDesc,
-    "~3.2.0": favorUser,
-    "~3.3.1": favorUserV331,
+    "1.1.0": getUserBga,
+    "^1.2.0": getRegistro,
+    "2.0.0": getUserPedidoName,
+    "2.1.0": getUserPendiente,
+    "3.0.0": userPagoPendienteCiudad,
+    "3.1.1": userPagoPendienteDesc,
+    "3.2.0": favorUser,
+    "3.3.1": favorUserV331,
 }))
 /**
  * ? insertar un nuevo usuario V1 1.0.0
