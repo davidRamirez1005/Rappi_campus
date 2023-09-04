@@ -61,6 +61,34 @@ Usuarios estaban dispuestos a pagar por acceder a productos y servicios en la ap
 > - Sea cortés y respetuoso con el Rappitendero.
 > - Déle una buena calificación al Rappitendero si está satisfecho con el servicio.
 
+### Objetivo General:
+
+Desarrollar un backend para una aplicación tipo Rappi Favores que permita gestionar eficientemente las solicitudes, consultas y el manejo de versiones mediante el uso de roles para acceder a los diferentes endpoints y versiones de la aplicación.
+
+### Objetivos Específicos:
+
+**Diseño de la Base de Datos:**
+
+   - Diseñar una base de datos que permita almacenar y recuperar datos relacionados con usuarios, tareas, pagos, etc.
+   - Implementar esquemas para cada coleccion presente en la base de datos.
+
+
+**Desarrollo de la API:**
+
+   - Crear una API que permita realizar consultas y gestionar solicitudes de servicios.
+   - Implementar endpoints para la creación, consulta y eliminación de servicios y consultas.
+   - Incorporar autenticación y autorización por medio de roles.
+
+
+**Gestión de Versiones:**
+
+   - Desarrollar un sistema de gestión de versiones que permita a los usuarios acceder a diferentes consultas usando el mismo endpoint pero dependiendo de la version, esta consulta tendra cambios.
+
+   
+
+
+
+
 ### INFORMACION DEL PROYECTO
 
 Esta documentación describe una aplicación similar a la de rappi_favores construida utilizando Node.js, Express.js y MongoDB como base de datos. La aplicación cuenta con un sistema de autenticación basado en roles y utiliza las librerías `dotenv`, `express-session`, `jose`, `MongoDB`, `nodemon`, `express-rate-limit`, `passport`, `passport-http-bearer`.
@@ -220,7 +248,7 @@ Procedemos a copiar el token y a colocarlo en la parte de headers mas concretame
 
 Posteriormente nos dirigimos al endpoint al cual le queramos realizar una peticion y si el rol tiene permisos sobre el endpoint, accederá de lo contrario te arrojara que no estas autorizado para acceder a este recurso.
 
-Cabe recalcar que el token cuenta con un tiempo de duración de 5 min despues de esto expirara y tendras que generar otro
+Cabe recalcar que el token cuenta con un tiempo de duración de 1 hora despues de esto expirara y tendras que generar otro
 
 Ahora también se debe especificar las versiones del endpoint que se esta manejando, para ello debemos establecer en los headers "Accept-Version" y se especifica la version a la cual se quiere acceder, se deberia ver mas o menos asi:
 
