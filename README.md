@@ -490,7 +490,7 @@ http://127.0.0.3:5012/task/2023-08-28
 
 ------
 
-**Versión**: 1.0.0
+**Versión**: 1.1.0
 
 - ***Inserta una nueva tarea***
 
@@ -516,7 +516,7 @@ http://127.0.0.3:5012/task
 
 ------
 
-**Versión**: 1.0.0
+**Versión**: 1.1.0
 
 - ***Actualizar el estado de una tarea***
 - Ten en cuenta que el estado debe corresponder a los definidos en la base de datos
@@ -597,7 +597,7 @@ http://127.0.0.3:5012/review/5
 
 ------
 
-**Versión**: 1.0.0
+**Versión**: 1.1.0
 
 - ***Inserta una nueva reseña***
 
@@ -658,7 +658,7 @@ http://127.0.0.3:5012/category/1
 
 ------
 
-**Versión**: 1.0.0
+**Versión**: 1.1.0
 
 - ***Inserta una nueva categoria***
 
