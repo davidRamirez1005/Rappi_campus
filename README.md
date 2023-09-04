@@ -119,9 +119,9 @@ https://github.com/davidRamirez1005/Rappi_campus
 
    El servidor debería iniciarse y estar listo para recibir solicitudes en la dirección 	`http://127.0.0.3:5012/` (puedes cambiar el puerto en el archivo `.env` si lo deseas).
 
-4. Establezca conección a atlas en mongo, luego dirijase a la carpeta **db**, seleccione la carpeta schema y ejecute el archivo, luego dirijase al archivo 'db.mongodb' y ejecute el archivo o use:
+4. Establezca conección a atlas en mongo, luego dirijase a la carpeta **db**, seleccione la carpeta schema y ejecute el archivo, luego dirijase al archivo 'db.mongodb' y ejecute el archivo o use: (tenga en cuenta cambiar el cluster-code de acuerdo a su atlas)
 
-   `mongodb+srv://rappi:rappi123@cluster0.b0o2rzg.mongodb.net/`
+   `mongodb+srv://<user>:<password>@cluster0.<clusterCode>.mongodb.net/`
 
    <img src="./src/assets/db.png" alt="tabalasDB" />
 
