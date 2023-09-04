@@ -65,6 +65,10 @@ Usuarios estaban dispuestos a pagar por acceder a productos y servicios en la ap
 
 Esta documentación describe una aplicación similar a la de rappi_favores construida utilizando Node.js, Express.js y MongoDB como base de datos. La aplicación cuenta con un sistema de autenticación basado en roles y utiliza las librerías `dotenv`, `express-session`, `jose`, `MongoDB`, `nodemon`, `express-rate-limit`, `passport`, `passport-http-bearer`.
 
+### DIAGRAMA DE LA BASE DE DATOS
+
+<img src="./src/assets/diagrama.png" alt="tabalasDB" />
+
 ## Requisitos previos
 
 - Node js instalado en tu maquina (Recomendada v18.16.0)
@@ -123,7 +127,7 @@ Una vez que observamos que el servidor esta activo y la base de datos instalada,
 
 #### **Ir el método POST **
 
-Se debe generar el token según el rol al que queramos usar, dependiendo del nivel de autoridad prodremos acceder a ciertos routers.
+ POST => `login` Se debe generar el token según el rol al que queramos usar, dependiendo del nivel de autoridad prodremos acceder a ciertos routers.
 
 ```
 http://127.0.0.3:5012/login
@@ -247,7 +251,7 @@ A continuación, se describen los endpoints disponibles en la aplicación junto 
   ```json
   {
       "username": "benito perez",
-      "identification" : 1012114
+      "identification" : 1012114,
       "email": "benito@example.com",
       "password": "benito123",
       "phone": "+578909809",
