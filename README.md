@@ -1,6 +1,6 @@
-# Rappi_Campus
+# **Rappi_Campus**
 
-
+------
 
 ### Modelo
 
@@ -16,9 +16,7 @@ Usuarios estaban dispuestos a pagar por acceder a productos y servicios en la ap
 ### Como se enfoca en cada entorno de negocio
 
 > 
->
->
-> La recopilación y el análisis de datos que Rappi pudo realizar a partir de las transacciones realizadas a través de su plataforma le permitió a la empresa desarrollar soluciones adaptadas a los diferentes tipos de necesidades de los usuarios. Por ejemplo, los comentarios de sus clientes ayudaron a Rappi a comprender que ciertos usuarios no confiaban en el conocimiento de los mensajeros sobre las compras de comestibles. Esta situación motivó a Rappi a contratar asistentes en los puntos de venta (personal shopper) para ayudar a los mensajeros de Rappi en el proceso de compra
+>La recopilación y el análisis de datos que Rappi pudo realizar a partir de las transacciones realizadas a través de su plataforma le permitió a la empresa desarrollar soluciones adaptadas a los diferentes tipos de necesidades de los usuarios. Por ejemplo, los comentarios de sus clientes ayudaron a Rappi a comprender que ciertos usuarios no confiaban en el conocimiento de los mensajeros sobre las compras de comestibles. Esta situación motivó a Rappi a contratar asistentes en los puntos de venta (personal shopper) para ayudar a los mensajeros de Rappi en el proceso de compra
 >
 > Rappi impulsó la creación de cocinas escondidas, especializadas en la preparación de comidas para llevar. Estas cocinas se convertirían en una alternativa que permitiría a los aliados comerciales de Rappi aumentar significativamente las ventas y el ahorro de costos, ya que se podrían eliminar los salarios de los meseros y otros costos del servicio de restaurante
 >
@@ -29,10 +27,10 @@ Usuarios estaban dispuestos a pagar por acceder a productos y servicios en la ap
 > **Aspecto Común** : 
 >
 > Además de identificar las necesidades de los usuarios, estas soluciones tenían otro aspecto común, explicó
-> Borrero, “Rappi conecta a personas con dinero pero sin tiempo, con personas con tiempo pero sin dinero;
+>Borrero, “Rappi conecta a personas con dinero pero sin tiempo, con personas con tiempo pero sin dinero;
 > ayudamos a las personas a ahorrar tiempo ya dedicarse a actividades en las que generan más valor. Rappi es
 > como un centro comercial virtual, reúne todo lo que hay cerca y te lo trae en minutos”.
->
+> 
 > Rappi exploró y abordó las diversas necesidades de los usuarios en lugar de centrarse en una sola demanda del cliente, a saber, los productos para llevar. Luego, avanzó en el desarrollo de la aplicación, con la esperanza de convertirse en una súper aplicación que integrara múltiples categorías comerciales.
 
 ### **SERVICIO DE RAPPI**
@@ -63,28 +61,34 @@ Usuarios estaban dispuestos a pagar por acceder a productos y servicios en la ap
 > - Sea cortés y respetuoso con el Rappitendero.
 > - Déle una buena calificación al Rappitendero si está satisfecho con el servicio.
 
-## Instalacion
+### INFORMACION DEL PROYECTO
+
+Esta documentación describe una aplicación similar a la de rappi_favores construida utilizando Node.js, Express.js y MongoDB como base de datos. La aplicación cuenta con un sistema de autenticación basado en roles y utiliza las librerías `dotenv`, `express-session`, `jose`, `MongoDB`, `nodemon`, `express-rate-limit`, `passport`, `passport-http-bearer`.
+
+## Requisitos previos
+
+- Node js instalado en tu maquina (Recomendada v18.16.0)
+
+  - Instalación de Node usando NVM para Linux => nvm install v18.16.0
+
+  - Instalación de Node usando NVM para Windows => https://github.com/coreybutler/nvm-windows
+
+  - Verifica si se instaló correctamente:
+
+    ```bash
+    node -v
+    npm -v
+    ```
+
+- MongoDB instalado y configurado con las credenciales necesarias para conectarse a la base de datos.
+
+## Instalación
 
 **Repositorio a clonar:**
 
-```
+```bash
 https://github.com/davidRamirez1005/Rappi_campus
 ```
-
-El proyecto usa **Node**, en caso de no tenerlo instalado:
-
-Instalación de Node usando NVM para Linux => nvm install v18.2.0(Versión recomendada: 18.2.0)
-
-Instalación de Node usando NVM para Windows => https://github.com/coreybutler/nvm-windows
-
-Verifica si se instaló correctamente:
-
-```
-node -v
-npm -v
-```
-
-
 
 ## Notas
 
@@ -95,12 +99,12 @@ npm -v
 
 ## Instrucciones
 
-1. descarga las dependencias y dependencias de desarrollo, usar: `npm i` o `npm update`
+1. Descarga las dependencias y dependencias de desarrollo, usar: `npm i` o `npm update`
 
-2. una vez descargado nodejs y las dependencias crear el archivo **.env**, lo siguiente es la estructura que debe usar, tambien está en .env.example
+2. Una vez descargado nodejs y las dependencias crear el archivo **.env**, lo siguiente es la estructura que debe usar, tambien está en .env.example
 
    ```gherkin
-   MY_SERVER={"hostname":"127.10.10.10", "port":5050}
+   MY_SERVER={"hostname":"127.0.0.3", "port":5012}
    ATLAS_USER="user"
    ATLAS_PASSWORD="password"
    ATLAS_DB="db_campus_rappi"
@@ -115,9 +119,114 @@ npm -v
 
    <img src="./src/assets/db.png" alt="tabalasDB" />
 
+Una vez que observamos que el servidor esta activo y la base de datos instalada, procedemos a acceder a los router, sin embargo debemos generar el token antes por lo que procedemos:
+
+#### **Ir el método POST **
+
+Se debe generar el token según el rol al que queramos usar, dependiendo del nivel de autoridad prodremos acceder a ciertos routers.
+
+```
+http://127.0.0.3:5012/login
+```
+
+En la aplicación se definieron 3 roles
+
+- user: el cual tiene acceso a las siguientes colecciones junto con sus versiones  y métodos colecciones 
+
+-  ["task", "payment", "review","category"]
+
+  ```js
+  "task": {
+  		"get": ["2.1.0", "3.1.0"],
+  		"post": ["1.1.0"]
+  	},
+  	"payment":{
+  		"get": ["1.1.0"]
+  	},
+  	"review":{
+  		"get": ["2.1.0", "3.1.0"],
+  		"post": ["1.1.0"]
+  	},
+  	"category":{
+  		"get": ["2.1.0", "3.1.0"]
+  	}
+  ```
+
+  ```json
+  {
+      "ROL": "user",
+      "ROL_EMAIL": "alex@example.com",
+      "ROL_PASSWORD":  "mypassword"
+  }
+  ```
+
+  
+
+- shopkeeper:  el cual tiene acceso a las siguientes colecciones junto con sus versiones  y métodos colecciones 
+
+- ["task", "review", "payment"]
+
+  ```js
+  "task": {
+  		"get": ["2.1.0", "3.1.0"],
+  		"put": ["1.1.0"]
+  	},
+  	"payment":{
+  		"get": ["1.1.0"]
+  	},
+  	"review":{
+  		"get": ["2.1.0", "3.1.0"]
+  	}
+  }
+  ```
+
+  ```json
+  {
+      "ROL": "shopkeeper",
+      "ROL_EMAIL": "sophie@example.com",
+      "ROL_PASSWORD":  "sophie789"
+  }
+  ```
+
+  
+
+- Admin: el cual tiene acceso a todas las colecciones, versiones y métodos.
+
+  ```json
+  {
+      "ROL": "admin",
+      "ROL_EMAIL": "CJimenez21@example.com",
+      "ROL_PASSWORD":  "admin2"
+  }
+  ```
+
+  
+
+  Esta informacion debe ir en el body de nuestra peticion dado que va a verificar en la base de datos si este usuario se encuentra registrado.
+
+<img src="./src/assets/token.png" alt="token" />
+
+Si todo sale bien, esto nos dara una serie de caracteres, estos conforman nuestro token
+
+Procedemos a copiar el token y a colocarlo en la parte de headers mas concretamente como "Authorization" y debemos escribir bearer antes de pegar el token, se deberia ver mas o menos asi:
+
+<img src="./src/assets/bearer.png" alt="tokenBearer" />
+
+Posteriormente nos dirigimos al endpoint al cual le queramos realizar una peticion y si el rol tiene permisos sobre el endpoint, accederá de lo contrario te arrojara que no estas autorizado para acceder a este recurso.
+
+Cabe recalcar que el token cuenta con un tiempo de duración de 5 min despues de esto expirara y tendras que generar otro
+
+Ahora también se debe especificar las versiones del endpoint que se esta manejando, para ello debemos establecer en los headers "Accept-Version" y se especifica la version a la cual se quiere acceder, se deberia ver mas o menos asi:
+
+<img src="./src/assets/accept.png" alt="acceptVersion" />
+
+Si nuestro rol nos permite acceder a esta versión no dejara ingresar correctamente, de lo contrario nos negara el acceso a dicho endpoint con un mensaje como "This version is not allowed"
+
+------
 
 
-## Endpoints y Métodos
+
+## **Endpoints y Métodos**
 
 A continuación, se describen los endpoints disponibles en la aplicación junto con sus respectivos métodos HTTP y formatos de datos requeridos.
 
@@ -195,6 +304,8 @@ A continuación, se describen los endpoints disponibles en la aplicación junto 
 
 - **GET** --*obtener la descripcion del favor completo por un usuario en especifico y el tendero que atendió el favor* 
 
+------
+
 
 
 ## Endpoint: *Shopkeeper*
@@ -254,13 +365,15 @@ A continuación, se describen los endpoints disponibles en la aplicación junto 
 
 - **GET** -- *obtener todos los tenderos por medio de la cedula* => `http://127.0.0.3:5012/shopkeeper/listar/3`
 
+------
+
 
 
 ## Endpoint: *Payment*
 
 **Versión**: 1.1.0
 
-- #### POST -- *nsertar un nuevo metodo de pago*  => `/payment/agregar`: 
+- #### POST -- *Insertar un nuevo metodo de pago*  => `/payment/agregar`: 
 
   ```bash
   http://127.0.0.3:5012/payment/agregar
@@ -278,25 +391,259 @@ A continuación, se describen los endpoints disponibles en la aplicación junto 
   }
   ```
 
-  
 
-### Dependencias usadas:
+------
 
-```json
-"dependencies": {
-    "dotenv": "16.3.1",
-    "express": "4.18.2",
-    "express-rate-limit": "^6.8.0",
-    "express-session": "1.17.3",
-    "express-validator": "^7.0.1",
-    "mongodb": "5.7.0",
-    "passport": "0.6.0",
-    "passport-http-bearer": "1.0.1"
-},
-"devDependencies": {
-   "express-routes-versioning": "^1.0.1",
-   "jose": "4.14.4",
-   "nodemon": "3.0.1"
-  }
+
+
+## Endpoint: *task*
+
+**Versión**: 1.1.0
+
+- ***Lista todas las tareas***
+
+**Versión**: 2.1.0
+
+- ***Lista todas las tareas Completadas***
+
+**Versión**: 3.1.0
+
+- ***Lista todas las tareas ordenadas por fecha y con su salida formateada***
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/task
 ```
 
+------
+
+**Versión**: 1.1.0
+
+- ***Lista las tareas por id***
+- `http://127.0.0.3:5012/task/:id_task`
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/task/3
+```
+
+**Versión**: 2.1.0
+
+- ***Lista tareas según su estado y con salida formateada***
+- Ten en cuenta que el estado debe corresponder a los definidos en la base de datos
+- `http://127.0.0.3:5012/task/:estado`
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/task/Solicitado
+http://127.0.0.3:5012/task/Completado
+http://127.0.0.3:5012/task/Asignado
+```
+
+**Versión**: 3.1.0
+
+- ***Lista tareas realizadas un día en especifico y con su salida formateada***
+- `http://127.0.0.3:5012/task/:fecha`
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/task/2023-08-28
+```
+
+------
+
+**Versión**: 1.0.0
+
+- ***Inserta una nueva tarea***
+
+```json
+{
+  "Titulo": "Transporte al aeropuerto",
+  "Descripcion": "Necesito un conductor que me aeropuerto mañana temprano.",
+  "Id_Usuario": 4,
+  "Id_Tendero": 5,
+  "Estado": "en Proceso",
+  "Id_Categoria": 6,
+  "Ciudad": "Bucaramanga",
+  "direccion": "Avenida 89",
+  "Id_Pago": 10
+}
+```
+
+**POST**
+
+```bash
+http://127.0.0.3:5012/task
+```
+
+------
+
+**Versión**: 1.0.0
+
+- ***Actualizar el estado de una tarea***
+- Ten en cuenta que el estado debe corresponder a los definidos en la base de datos
+
+```json
+{
+  "Id_Tarea": 8,
+  "Estado": "Completado"
+}
+```
+
+**PUT**
+
+```bash
+http://127.0.0.3:5012/task
+```
+
+------
+
+
+
+## Endpoint: *review*
+
+**Versión**: 1.1.0
+
+- ***Lista todas las reseñas***
+
+**Versión**: 2.1.0
+
+- ***Lista todas las reseñas con salida formateada***
+
+**Versión**: 3.1.0
+
+- ***Lista todas las reseñas con salida formateada y ordenadas de mas rankeadas a menos***
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/review
+```
+
+------
+
+**Versión**: 1.1.0
+
+- ***Lista las reseñas por id***
+- `http://127.0.0.3:5012/review/:id_review`
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/review/6
+```
+
+**Versión**: 2.1.0
+
+- ***Lista las reseñas por nombre de usuario con salida formateada***
+- `http://127.0.0.3:5012/review/:Nombre_usuario`
+- Ten en cuenta que el nombre de usuario debe corresponder a los definidos en la base de datos, eh aqui unos ejemplos
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/review/alex Anonymous
+http://127.0.0.3:5012/review/jose david ramirez
+```
+
+**Versión**: 3.1.0
+
+- ***Lista  las reseñas por rating con salida formateada***
+- `http://127.0.0.3:5012/review/:calificacion`
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/review/5
+```
+
+------
+
+**Versión**: 1.0.0
+
+- ***Inserta una nueva reseña***
+
+```json
+{
+  "Id_Tarea": 10,
+  "Id_Usuario": 4,
+  "Calificacion": 5,
+  "Comentario": "Muy buen servicio, lo volverere a utilizar"
+}
+```
+
+**POST**
+
+```bash
+http://127.0.0.3:5012/review
+```
+
+------
+
+
+
+## Endpoint: *category*
+
+**Versión**: 1.1.0
+
+- ***Lista todas las categorías***
+
+**Versión**: 2.1.0
+
+- ***Lista todas categorías ordenadas alfabéticamente por nombre y con salida formateada***
+
+**Versión**: 3.1.0
+
+- ***Lista las categorías mas populares***
+
+ **GET**
+
+```bash
+http://127.0.0.3:5012/category
+```
+
+------
+
+**Versión**: 1.1.0
+
+- ***Lista las categorías por id***
+
+**Versión**: 2.1.0
+
+- ***Lista las categorías por id pero con la salida formateada***
+
+  **GET**
+
+```bash
+http://127.0.0.3:5012/category/1
+```
+
+------
+
+**Versión**: 1.0.0
+
+- ***Inserta una nueva categoria***
+
+```json
+ {
+  "Nombre": "Servicio de cerrajeria",
+  "Descripcion": "Este servicio consta de arreglar chapas, replicas de llaves, etc...",
+  "Icono": "fas fa-lock"
+}
+```
+
+**POST**
+
+```bash
+http://127.0.0.3:5012/category
+```
+
+------
+
+
+
+Si tienes alguna pregunta o comentario sobre esta aplicación, no dudes en ponerte en contacto con nosotros a través dejosedavid.ramirez1005@gmail.com o  [cristianjj21@gmail.com](mailto:cristianjj21@gmail.com). ¡Esperamos que disfrutes usando nuestra aplicación de agendamiento de citas odontológicas!
